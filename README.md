@@ -47,3 +47,11 @@ end
 ```
 
 Idea: What about to implement [Morse code](https://en.wikipedia.org/wiki/Morse_code) ?
+
+## GSM Modem
+
+
+
+## GPS
+
+http://aprs.gids.nl/nmea/
