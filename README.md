@@ -94,6 +94,8 @@ All commands end with the characters `\r\n`. The basic commands used here are th
 | Command  | Description  | Return value |
 |---|---|---|
 | AT  | Test Modem  |  OK |
+| AT+CPIN? | | |
+| AT+CPIN="1234" | Unlook SIM using pin 1234 | |
 
 
 Open the serial port:
@@ -123,8 +125,6 @@ if bytesavailable(sp) > 0; println(String(read(sp))); end
 | AT+CMGF=1  | Set the format of messages to Text mode  |   |
 | AT+CSCA="some number"  |   |   |
 | AT+CMGS="phone_number" |   |   |
-| AT+CPIN? | | |
-| AT+CPIN="1234" | Unlook SIM using pin 1234 | |
 
 
 ### Global Navigation Satellite System (GNSS)
