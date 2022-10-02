@@ -1,3 +1,5 @@
+# run as root on Raspberry Pi
+
 
 function short(filename)
     write(filename,"1");

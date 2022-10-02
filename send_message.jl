@@ -59,7 +59,7 @@ sleep(0.1)
 echo(sp)
 
 
-# query of GNSS is powerd on
+# query if GNSS is powerd on
 write(sp, "AT+CGNSPWR?\r\n")
 sleep(0.1)
 echo(sp)
