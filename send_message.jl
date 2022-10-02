@@ -69,7 +69,7 @@ write(sp, "AT+CGNSPWR=1\r\n")
 sleep(0.1)
 echo(sp)
 
-# query of GNSS baud rate
+# query the GNSS baud rate
 write(sp, "AT+CGNSIPR?\r\n")
 sleep(0.1)
 echo(sp)

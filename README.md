@@ -134,7 +134,7 @@ Examples of GNSS include Europe’s Galileo, the USA’s NAVSTAR Global Position
 | Command      | Description  | Return value |
 |--------------|---|---|
 | AT+CGNSPWR?  | query if GNSS is powerd on | |
-| AT+CGNSIPR?  | query of GNSS baud rate | |
+| AT+CGNSIPR?  | query the GNSS baud rate | |
 | AT+CGNSPWR=1 | power GNSS  on | |
 | AT+CGNSINF   | get time and coordinates (if available) | |
 
