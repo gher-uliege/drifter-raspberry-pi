@@ -1,12 +1,22 @@
 using LibSerialPort
 using TOML
 using Dates
+using PiGPIO
 
 config = TOML.parse(open("drifter.toml"))
 phone_number = config["phone_number"]
 local_SMS_service_center = config["local_SMS_service_center"]
 pin = config["pin"]
 APN = config["access_point_network"]
+
+
+function start_modem()
+    pi = Pi();
+    pin = 4; # mapping to port 7
+    PiGPIO.write(pi, pin, PiGPIO.ON);
+    sleep(4);
+    PiGPIO.write(pi, pin, PiGPIO.OFF)
+end
 
 function get(sp)
     out = ""
@@ -79,12 +89,15 @@ function send_message(sp,phone_number,local_SMS_service_center,message)
     get(sp)
 end
 
+println("starting ", Dates.now())
 
+start_modem()
+sleep(2)
 
 sp = LibSerialPort.open(config["portname"], config["baudrate"])
 sleep(2)
 
-
+#=
 write(sp, "ATE0\r\n")
 get(sp)
 
@@ -96,6 +109,7 @@ cmd(sp,"AT","OK")
 write(sp, "AT\r\n")
 sleep(0.1)
 echo(sp)
+=#
 
 write(sp, "AT+CPIN=\"$pin\"\r\n")
 echo(sp)
@@ -141,25 +155,25 @@ write(sp, "AT+CGNSTST=0\r\n")
 sleep(0.1)
 echo(sp)
 
+print(aa)
+
 =#
 
-print(aa)
 
 
 function get_gps(sp)
     for i = 1:10
-        try
-            write(sp, "AT+CGNSINF\r\n")
-            sleep(0.1)
-            info = get(sp)
-            parts = split(split(info,"\r\n")[2],",")
+        write(sp, "AT+CGNSINF\r\n")
+        sleep(0.1)
+        info = get(sp)
+        parts = split(split(info,"\r\n")[2],",")
 
-            time = parse(DateTime,parts[3],dateformat"yyyymmddHHMMSS.sss")
+        time = parse(DateTime,parts[3],dateformat"yyyymmddHHMMSS.sss")
+
+        if (parts[4] !== "") && (parts[5] !== "")
             latitude = parse(Float64,parts[4])
             longitude = parse(Float64,parts[5])
             return time,longitude,latitude
-        catch
-            @info "kapuut: $info"
         end
         sleep(10)
     end
@@ -180,12 +194,13 @@ sleep(0.1)
 echo(sp)
 =#
 
+hostname = gethostname()
 
 last_message = DateTime(1,1,1)
 last_save = DateTime(1,1,1)
-fname = "track.txt"
-rm(fname)
-dt_message = Dates.Minute(1)
+fname = "track-$hostname-$(Dates.format(Dates.now(),"yyyymmddTHHMMSS")).txt"
+isfile(fname) && rm(fname)
+dt_message = Dates.Minute(10)
 dt_save = Dates.Minute(1)
 
 open(fname,"a+") do f
@@ -196,10 +211,9 @@ open(fname,"a+") do f
         time,longitude,latitude = get_gps(sp)
 
         if now - last_message >  dt_message
-            println(time,",",longitude,",",latitude)
             message = "sigo vivo, estoy en $longitude, $latitude, $time"
-
-            #send_message(sp,phone_number,local_SMS_service_center,message)
+            println("sending: ",message)
+            send_message(sp,phone_number,local_SMS_service_center,message)
             last_message = now
         end
 
@@ -208,12 +222,14 @@ open(fname,"a+") do f
             flush(f)
             last_save = now
         end
+
+        sleep(min(dt_save,dt_message))
     end
 end
 
 
-message = "sigo vivo, estoy en $longitude, $latitude, $time"
-print(message)
+#message = "sigo vivo, estoy en $longitude, $latitude, $time"
+#print(message)
 
 #=
 message = "sigo vivo"

@@ -46,9 +46,11 @@ Pkg.add("LibSerialPort")
 Install other software:
 
 ```bash
-sudo apt-get install minicom p7zip-full git emacs-nox
+sudo apt-get install minicom p7zip-full git emacs-nox pigpiod
+sudo timedatectl set-timezone UTC
 ```
 
+`pigpiod` for GPIO
 
 ## Warm-up: On-board led blinking
 
@@ -139,6 +141,9 @@ Examples of GNSS include Europe’s Galileo, the USA’s NAVSTAR Global Position
 | AT+CGNSINF   | get time and coordinates (if available) | |
 
 
+```
+sudo pigpiod
+```
 
 http://aprs.gids.nl/nmea/
 
