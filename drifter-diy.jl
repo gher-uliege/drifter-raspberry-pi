@@ -109,7 +109,7 @@ end
 
 @info "starting $(Dates.now())"
 
-confname = joinpath(dirname(@__FILE__),"drifter.toml")
+confname = joinpath(dirname(@__FILE__),"drifter-diy.toml")
 config =
     open(confname) do f
         TOML.parse(f)
@@ -168,7 +168,7 @@ hostname = gethostname()
 
 last_message = DateTime(1,1,1)
 last_save = DateTime(1,1,1)
-fname = "track-$hostname-$(Dates.format(Dates.now(),"yyyymmddTHHMMSS")).txt"
+fname = expanduser("~/track-$hostname-$(Dates.format(Dates.now(),"yyyymmddTHHMMSS")).txt")
 isfile(fname) && rm(fname)
 dt_message = Dates.Minute(10)
 dt_save = Dates.Minute(1)
