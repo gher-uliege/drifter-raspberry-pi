@@ -3,11 +3,6 @@ using TOML
 using Dates
 using PiGPIO
 
-config = TOML.parse(open("drifter.toml"))
-phone_number = config["phone_number"]
-local_SMS_service_center = config["local_SMS_service_center"]
-pin = config["pin"]
-APN = config["access_point_network"]
 
 
 function start_modem()
@@ -91,6 +86,14 @@ end
 
 println("starting ", Dates.now())
 
+config = TOML.parse(open("drifter.toml"))
+phone_number = config["phone_number"]
+local_SMS_service_center = config["local_SMS_service_center"]
+pin = config["pin"]
+APN = config["access_point_network"]
+
+println("phone_number ",phone_number)
+
 start_modem()
 sleep(2)
 
@@ -161,26 +164,33 @@ print(aa)
 
 
 
-function get_gps(sp)
+function get_gnss(sp)
+    response = get(sp)
+    @info response
     for i = 1:10
         write(sp, "AT+CGNSINF\r\n")
         sleep(0.1)
-        info = get(sp)
-        parts = split(split(info,"\r\n")[2],",")
+        response = get(sp)
+        info = split(response,"\r\n")
+        if length(info) >= 2
+            parts = split(info[2],",")
+            @show parts
 
-        time = parse(DateTime,parts[3],dateformat"yyyymmddHHMMSS.sss")
+            if (length(parts) >= 5) && (parts[3] !== "") && (parts[4] !== "") && (parts[5] !== "")
+                time = parse(DateTime,parts[3],dateformat"yyyymmddHHMMSS.sss")
 
-        if (parts[4] !== "") && (parts[5] !== "")
-            latitude = parse(Float64,parts[4])
-            longitude = parse(Float64,parts[5])
-            return time,longitude,latitude
+                latitude = parse(Float64,parts[4])
+                longitude = parse(Float64,parts[5])
+                return time,longitude,latitude
+            end
         end
+        println("GNSS response" ,response)
         sleep(10)
     end
 end
 
 
-time,longitude,latitude = get_gps(sp)
+time,longitude,latitude = get_gnss(sp)
 
 #=
 while true
@@ -208,7 +218,7 @@ open(fname,"a+") do f
         global last_message, last_save
 
         now = Dates.now()
-        time,longitude,latitude = get_gps(sp)
+        time,longitude,latitude = get_gnss(sp)
 
         if now - last_message >  dt_message
             message = "sigo vivo, estoy en $longitude, $latitude, $time"
