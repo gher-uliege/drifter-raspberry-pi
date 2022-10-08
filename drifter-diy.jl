@@ -63,7 +63,22 @@ function waitfor(sp,expect)
     return out
 end
 
+function enable_gnss(sp,state)
+    if state
+        # power GNSS  on
+        write(sp, "AT+CGNSPWR=1\r\n")
+        sleep(0.1)
+        echo(sp)
+    else
+        # power GNSS  off
+        write(sp, "AT+CGNSPWR=0\r\n")
+        sleep(0.1)
+        echo(sp)
+    end
+end
+
 function send_message(sp,phone_number,local_SMS_service_center,message)
+    enable_gnss(sp,false)
     write(sp, "AT+CMGF=1\r\n")
     write(sp, "AT+CSCA=\"$local_SMS_service_center\"\r\n")
     get(sp)
@@ -78,8 +93,12 @@ function send_message(sp,phone_number,local_SMS_service_center,message)
     write(sp, message)
     write(sp, "\x1a\r\n")
     get(sp)
+    enable_gnss(sp,true)
 end
 
+function send_message(sp,phone_number,local_SMS_service_center,time,longitude,latitude)
+
+end
 function get_gnss(sp)
     response = get(sp)
     @info response
@@ -106,6 +125,7 @@ function get_gnss(sp)
         sleep(10)
     end
 end
+
 
 @info "starting $(Dates.now())"
 
@@ -149,6 +169,7 @@ write(sp, "AT+CPIN?\r\n")
 sleep(0.1)
 echo(sp)
 
+enable_gnss(sp,true)
 
 # power GNSS  on
 write(sp, "AT+CGNSPWR=1\r\n")
@@ -163,6 +184,10 @@ echo(sp)
 
 # get first position
 time,longitude,latitude = get_gnss(sp)
+
+message = "first fix $longitude, $latitude, $time"
+@info "sending: $message"
+send_message(sp,phone_number,local_SMS_service_center,message)
 
 hostname = gethostname()
 
