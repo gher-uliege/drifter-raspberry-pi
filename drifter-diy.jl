@@ -28,20 +28,13 @@ function get(sp)
     return out
 end
 
-function cmd(sp,s,expect=nothing)
-    info0 = get(sp)
-
-    write(sp, s * "\r\n")
-    return waitfor(sp,expect)
-end
-
 function waitfor(sp,expect)
     out = ""
     while true
         if bytesavailable(sp) > 0
             out *= String(read(sp))
         end
-        @info "wait for $expect in: $out"
+        @debug "wait for $expect in: $out"
         if occursin(expect,out)
             break
         end
@@ -65,23 +58,20 @@ end
 function send_message(sp,phone_number,local_SMS_service_center,message)
     write(sp, "AT+CMGF=1\r\n")
     waitfor(sp,"OK")
+
     write(sp, "AT+CSCA=\"$local_SMS_service_center\"\r\n")
     waitfor(sp,"OK")
 
     write(sp, "AT+CMGS=\"$phone_number\"\r\n")
     waitfor(sp,"\r\n> ")
-
     write(sp, message)
     write(sp, "\x1a\r\n")
     waitfor(sp,"OK")
 end
 
-function send_message(sp,phone_number,local_SMS_service_center,time,longitude,latitude)
-
-end
 function get_gnss(sp)
     response = get(sp)
-    @info response
+    @debug response
     while true
         write(sp, "AT+CGNSINF\r\n")
         response = waitfor(sp,"OK")
@@ -89,7 +79,7 @@ function get_gnss(sp)
         info = split(response,"\r\n")
         if length(info) >= 2
             parts = split(info[2],",")
-            @info "parts: $parts"
+            @debug "parts: $parts"
 
             if length(parts) >= 5
                 time = tryparse(DateTime,parts[3],dateformat"yyyymmddHHMMSS.sss")
@@ -120,7 +110,7 @@ local_SMS_service_center = config["local_SMS_service_center"]
 pin = config["pin"]
 APN = config["access_point_network"]
 
-@info "phone_number $phone_number"
+@info "phone number $phone_number"
 
 start_modem()
 sleep(2)
@@ -129,11 +119,12 @@ sp = LibSerialPort.open(config["portname"], config["baudrate"])
 sleep(2)
 
 @info "disable echo"
-cmd(sp,"ATE0","\r\nOK\r\n")
+write(sp,"ATE0")
+waitfor(sp,"OK")
 
 @info "test AT command"
-cmd(sp,"AT","\r\nOK\r\n")
-
+write(sp,"AT")
+waitfor(sp,"OK")
 
 @info "unlock SIM"
 write(sp, "AT+CPIN=\"$pin\"\r\n")
@@ -171,10 +162,11 @@ last_message = DateTime(1,1,1)
 last_save = DateTime(1,1,1)
 fname = expanduser("~/track-$hostname-$(Dates.format(Dates.now(),"yyyymmddTHHMMSS")).txt")
 isfile(fname) && rm(fname)
-dt_message = Dates.Minute(10)
-dt_save = Dates.Minute(1)
+dt_message = Dates.Second(config["message_every_seconds"])
+dt_save = Dates.Second(config["save_every_seconds"])
 
-@info "saving location every $dt_save in $fname and sending location every $dt_message"
+@info "saving location every $dt_save in $fname"
+@info "sending location every $dt_message to $phone_number"
 
 open(fname,"a+") do f
     while true

@@ -3,3 +3,5 @@ baudrate = 115200
 phone_number = "0032412345678"
 local_SMS_service_center = "0032495002530" # Orange, Belgium
 pin = "1234"
+save_every_seconds = 60
+message_every_seconds = 600
