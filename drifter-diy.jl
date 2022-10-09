@@ -28,24 +28,11 @@ function get(sp)
     return out
 end
 
-echo(sp) = @info get(sp)
-
 function cmd(sp,s,expect=nothing)
     info0 = get(sp)
 
     write(sp, s * "\r\n")
     return waitfor(sp,expect)
-#    while bytesavailable(sp) == 0
-#        sleep(0.1)
-#    end
-    # info = get(sp)
-    # @info info
-    # if !isnothing(expect)
-    #     if !occursin(expect,info)
-    #         @warn "expect $expect got $info"
-    #     end
-    # end
-    # return info
 end
 
 function waitfor(sp,expect)
@@ -58,7 +45,7 @@ function waitfor(sp,expect)
         if occursin(expect,out)
             break
         end
-        sleep(0.1)
+        sleep(0.5)
     end
     return out
 end
@@ -76,14 +63,10 @@ function enable_gnss(sp,state)
 end
 
 function send_message(sp,phone_number,local_SMS_service_center,message)
-    #enable_gnss(sp,false)
     write(sp, "AT+CMGF=1\r\n")
+    waitfor(sp,"OK")
     write(sp, "AT+CSCA=\"$local_SMS_service_center\"\r\n")
-    get(sp)
-
-    if bytesavailable(sp) > 0
-        String(read(sp))
-    end
+    waitfor(sp,"OK")
 
     write(sp, "AT+CMGS=\"$phone_number\"\r\n")
     waitfor(sp,"\r\n> ")
@@ -91,7 +74,6 @@ function send_message(sp,phone_number,local_SMS_service_center,message)
     write(sp, message)
     write(sp, "\x1a\r\n")
     waitfor(sp,"OK")
-    #enable_gnss(sp,true)
 end
 
 function send_message(sp,phone_number,local_SMS_service_center,time,longitude,latitude)
@@ -102,8 +84,8 @@ function get_gnss(sp)
     @info response
     while true
         write(sp, "AT+CGNSINF\r\n")
-        sleep(0.1)
-        response = get(sp)
+        response = waitfor(sp,"OK")
+
         info = split(response,"\r\n")
         if length(info) >= 2
             parts = split(info[2],",")
@@ -149,21 +131,9 @@ sleep(2)
 @info "disable echo"
 cmd(sp,"ATE0","\r\nOK\r\n")
 
+@info "test AT command"
 cmd(sp,"AT","\r\nOK\r\n")
 
-
-
-#=
-
-write(sp, "AT\r\n")
-get(sp)
-
-cmd(sp,"AT","OK")
-
-write(sp, "AT\r\n")
-sleep(0.1)
-echo(sp)
-=#
 
 @info "unlock SIM"
 write(sp, "AT+CPIN=\"$pin\"\r\n")
@@ -171,8 +141,7 @@ waitfor(sp,"SMS Ready")
 
 @info "query SIM"
 write(sp, "AT+CPIN?\r\n")
-sleep(0.1)
-echo(sp)
+waitfor(sp,"OK")
 
 # power GNSS  on
 @info "enable GNSS"
@@ -205,7 +174,7 @@ isfile(fname) && rm(fname)
 dt_message = Dates.Minute(10)
 dt_save = Dates.Minute(1)
 
-@info "saving location every $dt_save and sending location every $dt_message"
+@info "saving location every $dt_save in $fname and sending location every $dt_message"
 
 open(fname,"a+") do f
     while true
