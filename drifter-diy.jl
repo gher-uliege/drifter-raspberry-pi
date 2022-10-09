@@ -118,12 +118,24 @@ sleep(2)
 sp = LibSerialPort.open(config["portname"], config["baudrate"])
 sleep(2)
 
+# function cmd(sp,s,expect=nothing)
+#     info0 = get(sp)
+
+#     write(sp, s * "\r\n")
+#     return waitfor(sp,expect)
+# end
+
+
 @info "disable echo"
-write(sp,"ATE0")
+#cmd(sp,"ATE0","\r\nOK\r\n")
+
+write(sp,"ATE0\r\n")
 waitfor(sp,"OK")
 
+#cmd(sp,"AT","\r\nOK\r\n")
+
 @info "test AT command"
-write(sp,"AT")
+write(sp,"AT\r\n")
 waitfor(sp,"OK")
 
 @info "unlock SIM"
