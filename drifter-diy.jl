@@ -34,18 +34,18 @@ function cmd(sp,s,expect=nothing)
     info0 = get(sp)
 
     write(sp, s * "\r\n")
-
-    while bytesavailable(sp) == 0
-        sleep(0.1)
-    end
-    info = get(sp)
-    @info info
-    if !isnothing(expect)
-        if !occursin(expect,info)
-            @warn "expect $expect got $info"
-        end
-    end
-    return info
+    return waitfor(sp,expect)
+#    while bytesavailable(sp) == 0
+#        sleep(0.1)
+#    end
+    # info = get(sp)
+    # @info info
+    # if !isnothing(expect)
+    #     if !occursin(expect,info)
+    #         @warn "expect $expect got $info"
+    #     end
+    # end
+    # return info
 end
 
 function waitfor(sp,expect)
@@ -54,7 +54,7 @@ function waitfor(sp,expect)
         if bytesavailable(sp) > 0
             out *= String(read(sp))
         end
-        @info "wait for: $out"
+        @info "wait for $expect in: $out"
         if occursin(expect,out)
             break
         end
@@ -67,18 +67,16 @@ function enable_gnss(sp,state)
     if state
         # power GNSS  on
         write(sp, "AT+CGNSPWR=1\r\n")
-        sleep(0.1)
-        echo(sp)
+        waitfor(sp,"OK")
     else
         # power GNSS  off
         write(sp, "AT+CGNSPWR=0\r\n")
-        sleep(0.1)
-        echo(sp)
+        waitfor(sp,"OK")
     end
 end
 
 function send_message(sp,phone_number,local_SMS_service_center,message)
-    enable_gnss(sp,false)
+    #enable_gnss(sp,false)
     write(sp, "AT+CMGF=1\r\n")
     write(sp, "AT+CSCA=\"$local_SMS_service_center\"\r\n")
     get(sp)
@@ -92,8 +90,8 @@ function send_message(sp,phone_number,local_SMS_service_center,message)
 
     write(sp, message)
     write(sp, "\x1a\r\n")
-    get(sp)
-    enable_gnss(sp,true)
+    waitfor(sp,"OK")
+    #enable_gnss(sp,true)
 end
 
 function send_message(sp,phone_number,local_SMS_service_center,time,longitude,latitude)
@@ -148,9 +146,14 @@ sleep(2)
 sp = LibSerialPort.open(config["portname"], config["baudrate"])
 sleep(2)
 
+@info "disable echo"
+cmd(sp,"ATE0","\r\nOK\r\n")
+
+cmd(sp,"AT","\r\nOK\r\n")
+
+
+
 #=
-write(sp, "ATE0\r\n")
-get(sp)
 
 write(sp, "AT\r\n")
 get(sp)
@@ -162,26 +165,31 @@ sleep(0.1)
 echo(sp)
 =#
 
+@info "unlock SIM"
 write(sp, "AT+CPIN=\"$pin\"\r\n")
-echo(sp)
+waitfor(sp,"SMS Ready")
 
+@info "query SIM"
 write(sp, "AT+CPIN?\r\n")
 sleep(0.1)
 echo(sp)
 
+# power GNSS  on
+@info "enable GNSS"
 enable_gnss(sp,true)
 
-# power GNSS  on
-write(sp, "AT+CGNSPWR=1\r\n")
-sleep(0.1)
-echo(sp)
-
-
 # query if GNSS is powerd on
+@info "query GNSS"
 write(sp, "AT+CGNSPWR?\r\n")
-sleep(0.1)
-echo(sp)
+waitfor(sp,"OK")
 
+hostname = gethostname()
+
+@info "send first message"
+message = "$hostname ready, switching GNSS on"
+send_message(sp,phone_number,local_SMS_service_center,message)
+
+@info "get GNSS location"
 # get first position
 time,longitude,latitude = get_gnss(sp)
 
@@ -189,7 +197,6 @@ message = "first fix $longitude, $latitude, $time"
 @info "sending: $message"
 send_message(sp,phone_number,local_SMS_service_center,message)
 
-hostname = gethostname()
 
 last_message = DateTime(1,1,1)
 last_save = DateTime(1,1,1)
@@ -197,6 +204,8 @@ fname = expanduser("~/track-$hostname-$(Dates.format(Dates.now(),"yyyymmddTHHMMS
 isfile(fname) && rm(fname)
 dt_message = Dates.Minute(10)
 dt_save = Dates.Minute(1)
+
+@info "saving location every $dt_save and sending location every $dt_message"
 
 open(fname,"a+") do f
     while true
