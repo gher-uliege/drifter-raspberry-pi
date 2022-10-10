@@ -165,10 +165,9 @@ send_message(sp,phone_number,local_SMS_service_center,message)
 # get first position
 time,longitude,latitude = get_gnss(sp)
 
-message = "first fix $longitude, $latitude, $time"
-@info "sending: $message"
-send_message(sp,phone_number,local_SMS_service_center,message)
-
+#message = "first fix $longitude, $latitude, $time"
+#@info "sending: $message"
+#send_message(sp,phone_number,local_SMS_service_center,message)
 
 last_message = DateTime(1,1,1)
 last_save = DateTime(1,1,1)
