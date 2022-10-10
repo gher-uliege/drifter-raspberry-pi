@@ -1,0 +1,8 @@
+[deps]
+Genie = "c43c736e-a2d1-11e8-161f-af95117fbd1e"
+HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
+LibPQ = "194296ae-ab2e-5f79-8cd4-7183a0a5a0d1"
+SearchLight = "340e8cb6-72eb-11e8-37ce-c97ebeb32050"
+SearchLightPostgreSQL = "4327cdd6-4902-11ea-0272-430cea0431bd"
+Tables = "bd369af6-aec1-5ad0-b16a-f7cc5008161c"
+URIs = "5c2747f8-b7ea-4ff2-ba2e-563bfd36b1d4"
