@@ -28,14 +28,20 @@ function get(sp)
     return out
 end
 
-function waitfor(sp,expect)
+function waitfor(sp,expect,maxpoll=Inf)
     out = ""
+    i = 0
     while true
         if bytesavailable(sp) > 0
             out *= String(read(sp))
         end
         @debug "wait for $expect in: $out"
         if occursin(expect,out)
+            break
+        end
+
+        i = i+1
+        if i > maxpoll
             break
         end
         sleep(0.5)
@@ -56,15 +62,22 @@ function enable_gnss(sp,state)
 end
 
 function send_message(sp,phone_number,local_SMS_service_center,message)
+    @debug "set SMS text mode"
     write(sp, "AT+CMGF=1\r\n")
     waitfor(sp,"OK")
 
+    @debug "set local SMS service center"
     write(sp, "AT+CSCA=\"$local_SMS_service_center\"\r\n")
     waitfor(sp,"OK")
 
+    @debug "set phone number"
     write(sp, "AT+CMGS=\"$phone_number\"\r\n")
     waitfor(sp,"\r\n> ")
+    
+    @debug "send message"
     write(sp, message)
+
+    @debug "terminate message"
     write(sp, "\x1a\r\n")
     waitfor(sp,"OK")
 end
@@ -112,8 +125,23 @@ APN = config["access_point_network"]
 
 @info "phone number $phone_number"
 
-start_modem()
-sleep(2)
+
+
+# check if modem is on
+
+sp = LibSerialPort.open(config["portname"], config["baudrate"])
+write(sp,"AT\r\n")
+out = waitfor(sp,"OK",20)
+modem_on = occursin("OK",out)
+close(sp)
+
+if !modem_on
+    @info "start modem"
+    start_modem()
+    sleep(10)
+else
+    @info "modem already on"
+end
 
 sp = LibSerialPort.open(config["portname"], config["baudrate"])
 sleep(2)
@@ -124,7 +152,6 @@ sleep(2)
 #     write(sp, s * "\r\n")
 #     return waitfor(sp,expect)
 # end
-
 
 @info "disable echo"
 #cmd(sp,"ATE0","\r\nOK\r\n")
