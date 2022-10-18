@@ -7,7 +7,7 @@ First commands:
 ls
 cd directory_name
 rm file_name
-cat /proc/cpuinfo 
+cat /proc/cpuinfo
 wget some_url
 top
 ```
@@ -66,12 +66,12 @@ write("/sys/class/leds/led0/brightness","0")
 Blinking leds:
 
 ```julia
-filename = "/sys/class/leds/led0/brightness"; 
+filename = "/sys/class/leds/led0/brightness";
 
-while true; 
-   write(filename,"0"); 
-   sleep(0.5); 
-   write(filename,"1"); 
+while true;
+   write(filename,"0");
+   sleep(0.5);
+   write(filename,"1");
    sleep(0.5);
 end
 ```
@@ -89,7 +89,7 @@ We will need the SIM card in its standard card size (25 mm by 15 mm).
 * Power on the WaveShare Hat
 
 The Modem uses a series of so called [AT commands](https://en.wikipedia.org/wiki/Hayes_command_set).
-All commands start with `AT` (meaning 'attention'). 
+All commands start with `AT` (meaning 'attention').
 All commands end with the characters `\r\n`. The basic commands used here are the following:
 
 
@@ -141,9 +141,16 @@ Examples of GNSS include Europe’s Galileo, the USA’s NAVSTAR Global Position
 | AT+CGNSINF   | get time and coordinates (if available) | |
 
 
-```
-sudo pigpiod
-```
 
 http://aprs.gids.nl/nmea/
 
+
+# Run at start-up
+
+
+Add to `/etc/rc.local` the following before `exit 0`:
+
+```bash
+pigpiod
+sudo -u pi stdbuf -oL julia /home/pi/drifter-raspberry-pi/drifter-diy.jl >> /var/log/drifter-diy.log  2>&1 &
+```
