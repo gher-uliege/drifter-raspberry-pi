@@ -48,6 +48,8 @@ Install other software:
 ```bash
 sudo apt-get install minicom p7zip-full git emacs-nox pigpiod
 sudo timedatectl set-timezone UTC
+sudo systemctl enable pigpiod
+sudo systemctl start pigpiod
 ```
 
 `pigpiod` for GPIO
@@ -147,6 +149,11 @@ http://aprs.gids.nl/nmea/
 
 # Run at start-up
 
+```bash
+sudo cp drifter-diy.service /etc/systemd/system/
+sudo systemctl enable drifter-diy.service # start on boot
+sudo systemctl start drifter-diy.service
+```
 
 Add to `/etc/rc.local` the following before `exit 0`:
 

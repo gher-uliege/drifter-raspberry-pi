@@ -4,38 +4,7 @@ using Dates
 using PiGPIO
 using LoggingExtras
 using URIs
-
-
-function start_modem()
-    pi = Pi();
-    pin = 4; # mapping to port 7
-    PiGPIO.write(pi, pin, PiGPIO.ON);
-    sleep(4);
-    PiGPIO.write(pi, pin, PiGPIO.OFF)
-end
-
-function get(sp)
-    out = ""
-    if bytesavailable(sp) > 0
-        out *= String(read(sp))
-    end
-    return out
-end
-
-function waitfor(sp,expect)
-    out = ""
-    while true
-        if bytesavailable(sp) > 0
-            out *= String(read(sp))
-        end
-        @debug "wait for $expect in: $out"
-        if occursin(expect,out)
-            break
-        end
-        sleep(0.5)
-    end
-    return out
-end
+using GSMHat
 
 @info "starting $(Dates.now())"
 
@@ -153,4 +122,26 @@ write(sp,"AT+CIPCLOSE\r\n")
 ret = waitfor(sp,"CLOSED")
 
 
+# read SMS
 
+write(sp,"AT+CMGL=\"ALL\"\r\n")
+ret = waitfor(sp,"OK")
+list = split(ret,"\r\n")
+
+list_sms = []
+
+while !isempty(list)
+    while list[1] == ""
+        popfirst!(list)
+    end
+
+    status = popfirst!(list)
+    #a = split(split(status,"+CMGL: ")[2],",")
+    a = split(status,"+CMGL: ")[2]
+    data = readdlm(IOBuffer(a),',')
+    index,message_status,address,address_text,service_center_time_stamp = data
+    sms_message_body = popfirst!(list)
+    
+    sms = (; index,message_status,address,address_text,service_center_time_stamp,sms_message_body)
+    push!(list_sms,sms)
+end
