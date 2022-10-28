@@ -2,6 +2,8 @@ module GSMHat
 using LibSerialPort
 using Dates
 using PiGPIO
+using DelimitedFiles
+using URIs
 
 # using LoggingExtras
 
@@ -29,15 +31,19 @@ function get(sp)
     return out
 end
 
+function cmd(sp,s,expect="OK")
+    write(sp, s * "\r\n")
+    return split(waitfor(sp,expect,command = s),"\r\n",keepempty=false)
+end
 
-function waitfor(sp,expect::Vector{String},maxpoll=Inf)
+function waitfor(sp,expect::Vector{String},maxpoll=Inf; command="")
     out = ""
     i = 0
     while true
         if bytesavailable(sp) > 0
             out *= String(read(sp))
         end
-        @debug "wait for $expect in: $out"
+         #@debug "wait for $expect in: $out"
 
 
         if any([occursin(expect_,out) for expect_ in expect])
@@ -46,7 +52,7 @@ function waitfor(sp,expect::Vector{String},maxpoll=Inf)
 
         if occursin("ERROR",out)
             @warn "out: $out"
-            throw(ErrorException(out))
+            throw(ErrorException(command * ":" * out))
         end
 
         i = i+1
@@ -58,34 +64,61 @@ function waitfor(sp,expect::Vector{String},maxpoll=Inf)
     return out
 end
 
-function waitfor(sp,expect::String,maxpoll=Inf)
-    return waitfor(sp,[expect],maxpoll)
+function waitfor(sp,expect::String,maxpoll=Inf; command = "")
+    return waitfor(sp,[expect],maxpoll,command = command)
 end
 
-function enable_gnss(sp,state)
-    if state
-        # power GNSS  on
-        write(sp, "AT+CGNSPWR=1\r\n")
-        waitfor(sp,"OK")
-    else
-        # power GNSS  off
-        write(sp, "AT+CGNSPWR=0\r\n")
-        waitfor(sp,"OK")
+"""
+    GSMHat.enable_gnss(sp)
+
+Power GNSS (Global Navigation Satellite System) on. `sp` is connection object from `GSMHat.init`.
+"""
+enable_gnss(sp) = cmd(sp, "AT+CGNSPWR=1")
+
+"""
+    GSMHat.disable_gnss(sp)
+
+Power GNSS (Global Navigation Satellite System) off. `sp` is connection object from `GSMHat.init`.
+"""
+disable_gnss(sp) = cmd(sp, "AT+CGNSPWR=0")
+
+"""
+    time,lon,lat = GSMHat.get_gnss(sp)
+
+Get GNSS (Global Navigation Satellite System) coordinates and time. The function returns
+`nothing` if when position and/or time are unknown.
+"""
+function get_gnss(sp)
+    time = longitude = latitude = nothing
+    info = cmd(sp, "AT+CGNSINF")
+    if length(info) >= 2
+        parts = split(info[1],",")
+
+        if length(parts) >= 5
+            time = tryparse(DateTime,parts[3],dateformat"yyyymmddHHMMSS.sss")
+            latitude = tryparse(Float64,parts[4])
+            longitude = tryparse(Float64,parts[5])
+        end
+        @debug "GNSS response $(info[1])"
     end
+    return time,longitude,latitude
 end
 
-function send_message(sp,phone_number,local_SMS_service_center,message)
-    @debug "set SMS text mode"
-    write(sp, "AT+CMGF=1\r\n")
-    waitfor(sp,"OK")
+"""
+    GSMHat.send_message(sp,phone_number,local_SMS_service_center,message)
 
+Send the GSM `message` to the number `phone_number` (including coutry code, e.g. 003242345678 for Belgium)
+using the local SMS service center (also including country code).
+"""
+function send_message(sp,phone_number,local_SMS_service_center,message)
     @debug "set local SMS service center"
-    write(sp, "AT+CSCA=\"$local_SMS_service_center\"\r\n")
-    waitfor(sp,"OK")
+    cmd(sp, "AT+CSCA=\"$local_SMS_service_center\"")
+
+    @debug "set SMS text mode"
+    cmd(sp, "AT+CMGF=1")
 
     @debug "set phone number"
-    write(sp, "AT+CMGS=\"$phone_number\"\r\n")
-    waitfor(sp,"\r\n> ")
+    cmd(sp, "AT+CMGS=\"$phone_number\"\r\n","\r\n> ")
 
     @debug "send message $message"
     write(sp, message)
@@ -95,31 +128,63 @@ function send_message(sp,phone_number,local_SMS_service_center,message)
     waitfor(sp,"OK")
 end
 
-function get_gnss(sp)
-    response = get(sp)
-    @debug response
-    while true
-        write(sp, "AT+CGNSINF\r\n")
-        response = waitfor(sp,"OK")
 
-        info = split(response,"\r\n")
-        if length(info) >= 2
-            parts = split(info[2],",")
-            @debug "parts: $parts"
+"""
 
-            if length(parts) >= 5
-                time = tryparse(DateTime,parts[3],dateformat"yyyymmddHHMMSS.sss")
-                latitude = tryparse(Float64,parts[4])
-                longitude = tryparse(Float64,parts[5])
+GSMHat.get_messages(sp)
+"""
+function get_messages(sp)
+    write(sp,"AT+CMGL=\"ALL\"\r\n")
+    ret = waitfor(sp,"OK")
+    list = split(ret,"\r\n",keepempty=false)
 
-                if !isnothing(time) && !isnothing(latitude) && !isnothing(longitude)
-                    return time,longitude,latitude
-                end
+    if list[end] == "OK"
+        pop!(list)
+    end
+    list_sms = []
+
+    while !isempty(list)
+        status = popfirst!(list)
+        #a = split(split(status,"+CMGL: ")[2],",")
+        if startswith(status,"+CMGL: ")
+            a = replace(status,"+CMGL: " => "")
+            data = readdlm(IOBuffer(a),',')
+
+            if length(data) >= 5
+                index,message_status,address,address_text,service_center_time_stamp = data
+                sms_message_body = popfirst!(list)
+
+                sms = (; index,message_status,address,address_text,service_center_time_stamp,sms_message_body)
+                push!(list_sms,sms)
             end
         end
-        @debug "GNSS response $response"
-        sleep(10)
     end
+
+    return list_sms
+end
+
+"""
+
+GSMHat.delete_messages(sp, status=:received_read)
+"""
+function delete_messages(sp; status=:received_read)
+    if status == :received_read
+        flag = 1
+    elseif status == :all
+        flag = 4
+    else
+        error("unknown status $status for delete message")
+    end
+    cmd(sp,"AT+CMGD=1,$flag")
+end
+
+
+"""
+
+GSMHat.delete_message(sp, 1)
+"""
+function delete_message(sp, index)
+    cmd(sp,"AT+CMGD=$index")
 end
 
 function unlook(sp,pin)
@@ -136,48 +201,129 @@ function unlook(sp,pin)
     end
 end
 
+
+"""
+    GSMHat.reset(sp)
+
+Reset the modem.
+"""
+function reset(sp)
+    cmd(sp, "AT+CFUN=0")
+    cmd(sp, "AT+CFUN=1")
+end
+
+
+"""
+    sp = GSMHat.init(portname, baudrate; pin=nothing)
+
+Initialize the WaveShare GSM/GNSS/GPRS Hat pull pin 4 (mapping to port 7) high for 4 seconds and
+unlock the SIM card if `pin` is provided.
+"""
 function init(portname, baudrate; pin=nothing)
     # check if modem is on
     sp = LibSerialPort.open(portname, baudrate)
     write(sp,"AT\r\n")
     out = waitfor(sp,"OK",20)
     modem_on = occursin("OK",out)
-    close(sp)
 
     if !modem_on
+        close(sp)
         @info "start modem"
         start_modem()
         sleep(10)
+        sp = LibSerialPort.open(portname, baudrate)
+        sleep(2)
     else
         @info "modem already on"
     end
 
-    sp = LibSerialPort.open(portname, baudrate)
-    sleep(2)
-
-    # function cmd(sp,s,expect=nothing)
-    #     info0 = get(sp)
-
-    #     write(sp, s * "\r\n")
-    #     return waitfor(sp,expect)
-    # end
-
     @info "disable echo"
-    #cmd(sp,"ATE0","\r\nOK\r\n")
-
-    write(sp,"ATE0\r\n")
-    waitfor(sp,"OK")
-
-    #cmd(sp,"AT","\r\nOK\r\n")
+    cmd(sp,"ATE0")
 
     @info "test AT command"
-    write(sp,"AT\r\n")
-    waitfor(sp,"OK")
+    cmd(sp,"AT")
 
     if pin != nothing
         unlook(sp,pin)
     end
 
     return sp
+end
+
+"""
+
+GSMHat.enable_network(sp,APN)
+"""
+function enable_network(sp,APN)
+    # Attach to the network
+    write(sp,"AT+CGATT=1\r\n")
+    waitfor(sp,"OK")
+
+    # Wait for Attach
+    # Start task and set the APN
+    write(sp,"AT+CSTT=\"$APN\"\r\n")
+    waitfor(sp,"OK")
+
+    # Bring up the wireless connection
+    write(sp,"AT+CIICR\r\n")
+    waitfor(sp,"OK")
+
+    # Wait for bringup
+    # Get the local IP address
+    write(sp,"AT+CIFSR\r\n")
+    waitfor(sp,"\r\n") # no OK in output, just IP address
+    # like "\r\n10.197.161.140\r\n"
+end
+
+"""
+
+GSMHat.http(sp,method,url,data)
+"""
+function http(sp,method,url,data)
+    url2 = URI(url)
+
+    @assert url2.scheme == "http"
+    ip = url2.host
+    urlpath = url2.path
+
+    # port 80 is the default HTTP port
+    port = if isempty(url2.port)
+        80
+    else
+        parse(Int,url2.port)
+    end
+
+
+    if method == "get"
+        url_ = URI(url2, query = data)
+        msg = "GET $url_ HTTP/1.0\r\n\r\n"
+    else
+        urlencoded = string(URI(;query = data))[2:end]
+        #Host: httpbin.org
+        #Host: $(ip)
+#Connection: close
+
+        msg = """POST $urlpath HTTP/1.1
+Connection: close
+Host: $(ip)
+Content-Type: application/x-www-form-urlencoded
+Content-length: $(length(urlencoded))
+
+$(urlencoded)
+"""
+    end
+    # Start a TCP connection to remote address
+    cmd(sp,"AT+CIPSTART=\"TCP\",\"$ip\",$port","CONNECT OK")
+    write(sp,"AT+CIPSEND\r\n")
+    waitfor(sp,">")
+    write(sp,msg)
+    write(sp, "\x1a\r\n")
+#    out = waitfor(sp,"SEND OK")
+
+
+#    write(sp,"AT+CIPCLOSE\r\n")
+    ret = waitfor(sp,"CLOSED")
+
+    return ret
 end
 end
