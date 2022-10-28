@@ -1,6 +1,7 @@
 using Dates
 using TOML
 using LibSerialPort
+using GSMHat
 import GSMHat: start_modem, waitfor, enable_gnss, get_gnss, send_message
 
 using Logging
@@ -20,60 +21,14 @@ phone_number = config["phone_number"]
 local_SMS_service_center = config["local_SMS_service_center"]
 pin = config["pin"]
 APN = config["access_point_network"]
+portname = config["portname"]
+baudrate = config["baudrate"]
 
 @info "phone number $phone_number"
 
 
+sp = GSMHat.init(portname, baudrate; pin=pin)
 
-# check if modem is on
-
-sp = LibSerialPort.open(config["portname"], config["baudrate"])
-write(sp,"AT\r\n")
-out = waitfor(sp,"OK",20)
-modem_on = occursin("OK",out)
-close(sp)
-
-if !modem_on
-    @info "start modem"
-    start_modem()
-    sleep(10)
-else
-    @info "modem already on"
-end
-
-sp = LibSerialPort.open(config["portname"], config["baudrate"])
-sleep(2)
-
-# function cmd(sp,s,expect=nothing)
-#     info0 = get(sp)
-
-#     write(sp, s * "\r\n")
-#     return waitfor(sp,expect)
-# end
-
-@info "disable echo"
-#cmd(sp,"ATE0","\r\nOK\r\n")
-
-write(sp,"ATE0\r\n")
-waitfor(sp,"OK")
-
-#cmd(sp,"AT","\r\nOK\r\n")
-
-@info "test AT command"
-write(sp,"AT\r\n")
-waitfor(sp,"OK")
-
-@info "query SIM"
-write(sp, "AT+CPIN?\r\n")
-out = waitfor(sp,"OK")
-
-if !occursin("READY",out)
-    @info "unlock SIM"
-    write(sp, "AT+CPIN=\"$pin\"\r\n")
-    waitfor(sp,"SMS Ready")
-else
-    @info "SIM already unlocked"
-end
 
 # power GNSS  on
 @info "enable GNSS"

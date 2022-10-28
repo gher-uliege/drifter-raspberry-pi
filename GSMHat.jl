@@ -48,12 +48,12 @@ function waitfor(sp,expect::Vector{String},maxpoll=Inf)
             @warn "out: $out"
             throw(ErrorException(out))
         end
-        
+
         i = i+1
         if i > maxpoll
             break
         end
-        sleep(0.5)
+        sleep(1)
     end
     return out
 end
@@ -86,7 +86,7 @@ function send_message(sp,phone_number,local_SMS_service_center,message)
     @debug "set phone number"
     write(sp, "AT+CMGS=\"$phone_number\"\r\n")
     waitfor(sp,"\r\n> ")
-    
+
     @debug "send message $message"
     write(sp, message)
 
@@ -122,4 +122,62 @@ function get_gnss(sp)
     end
 end
 
+function unlook(sp,pin)
+    @info "query SIM"
+    write(sp, "AT+CPIN?\r\n")
+    out = waitfor(sp,"OK")
+
+    if !occursin("READY",out)
+        @info "unlock SIM"
+        write(sp, "AT+CPIN=\"$pin\"\r\n")
+        waitfor(sp,"SMS Ready")
+    else
+        @info "SIM already unlocked"
+    end
+end
+
+function init(portname, baudrate; pin=nothing)
+    # check if modem is on
+    sp = LibSerialPort.open(portname, baudrate)
+    write(sp,"AT\r\n")
+    out = waitfor(sp,"OK",20)
+    modem_on = occursin("OK",out)
+    close(sp)
+
+    if !modem_on
+        @info "start modem"
+        start_modem()
+        sleep(10)
+    else
+        @info "modem already on"
+    end
+
+    sp = LibSerialPort.open(portname, baudrate)
+    sleep(2)
+
+    # function cmd(sp,s,expect=nothing)
+    #     info0 = get(sp)
+
+    #     write(sp, s * "\r\n")
+    #     return waitfor(sp,expect)
+    # end
+
+    @info "disable echo"
+    #cmd(sp,"ATE0","\r\nOK\r\n")
+
+    write(sp,"ATE0\r\n")
+    waitfor(sp,"OK")
+
+    #cmd(sp,"AT","\r\nOK\r\n")
+
+    @info "test AT command"
+    write(sp,"AT\r\n")
+    waitfor(sp,"OK")
+
+    if pin != nothing
+        unlook(sp,pin)
+    end
+
+    return sp
+end
 end
