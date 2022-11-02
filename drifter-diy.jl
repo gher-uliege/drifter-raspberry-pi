@@ -110,8 +110,8 @@ open(fname,"a+") do f
                 GSMHat.delete_message(sp, message.index)
             end
         end
-        sleep(5)
-        #sleep(min(dt_save,dt_message))
+        #sleep(5)
+        sleep(min(dt_save,dt_message))
     end
 end
 

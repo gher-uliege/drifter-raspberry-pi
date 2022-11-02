@@ -4,6 +4,9 @@ using Dates
 using PiGPIO
 using DelimitedFiles
 using URIs
+using StringEncodings
+
+const ENCODING = "8859-1"
 
 # using LoggingExtras
 
@@ -26,7 +29,7 @@ end
 function get(sp)
     out = ""
     if bytesavailable(sp) > 0
-        out *= String(read(sp))
+        out *= decode(read(sp),"iso-$ENCODING")
     end
     return out
 end
@@ -41,7 +44,7 @@ function waitfor(sp,expect::Vector{String},maxpoll=Inf; command="")
     i = 0
     while true
         if bytesavailable(sp) > 0
-            out *= String(read(sp))
+            out *= decode(read(sp),"iso-$ENCODING")
         end
          #@debug "wait for $expect in: $out"
 
@@ -127,7 +130,6 @@ function send_message(sp,phone_number,local_SMS_service_center,message)
     write(sp, "\x1a\r\n")
     waitfor(sp,"OK")
 end
-
 
 """
 
@@ -242,6 +244,9 @@ function init(portname, baudrate; pin=nothing)
 
     @info "test AT command"
     cmd(sp,"AT")
+
+    @info "selects the character set $ENCODING"
+    cmd(sp,"AT+CSCS=\"$ENCODING\"")
 
     if pin != nothing
         unlook(sp,pin)
