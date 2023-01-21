@@ -40,9 +40,43 @@ response = cmd(sp, "AT+CGNSPWR?")
 
 hostname = gethostname()
 
+while true
+    # https://web.archive.org/web/20230121160033/https://docs.eseye.com/Content/ELS61/ATCommands/ELS61CREG.htm
+    reg_status = cmd(sp,"AT+CREG?")
+    modus,status = split(split(reg_status[1],':')[2],',')
+    @info "registration status" reg_status
+    if status in ("1","5")
+        break
+    else
+        @info "registration status" reg_status
+        sleep(20)
+    end
+end
+
+
 @info "send first message"
 message = "$hostname ready, switching GNSS on"
-send_message(sp,phone_number,local_SMS_service_center,message)
+
+ntry_message_send = 10
+
+for i = 1:ntry_message_send
+    try
+        send_message(sp,phone_number,local_SMS_service_center,message)
+        break
+    catch err
+        @info "catched error (try $i) " err
+
+        reg_status = cmd(sp,"AT+CREG?")
+        @info "registration status" reg_status
+
+        if i == ntry_message_send
+            @info("sending message failed after $ntry_message_send")
+            rethrow()
+        else
+            sleep(60)
+        end
+    end
+end
 
 last_message = DateTime(1,1,1)
 last_save = DateTime(1,1,1)
@@ -61,7 +95,7 @@ open(fname,"a+") do f
     while true
         global last_message, last_save, gnss_retry, gnss_fix
         global time, longitude, latitude
-        
+
         now = Dates.now()
 
         # GNSS coordinates

@@ -30,6 +30,7 @@ function get(sp)
     out = ""
     if bytesavailable(sp) > 0
         out *= decode(read(sp),"iso-$ENCODING")
+        #out *= String(read(sp))
     end
     return out
 end
@@ -45,6 +46,7 @@ function waitfor(sp,expect::Vector{String},maxpoll=Inf; command="")
     while true
         if bytesavailable(sp) > 0
             out *= decode(read(sp),"iso-$ENCODING")
+            #out *= String(read(sp))
         end
          #@debug "wait for $expect in: $out"
 
@@ -245,12 +247,12 @@ function init(portname, baudrate; pin=nothing)
     @info "test AT command"
     cmd(sp,"AT")
 
-    @info "selects the character set $ENCODING"
-    cmd(sp,"AT+CSCS=\"$ENCODING\"")
-
     if pin != nothing
         unlook(sp,pin)
     end
+
+    @info "selects the character set $(GSMHat.ENCODING)"
+    cmd(sp,"AT+CSCS=\"$(GSMHat.ENCODING)\"")
 
     return sp
 end
