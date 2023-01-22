@@ -146,6 +146,75 @@ Examples of GNSS include Europe’s Galileo, the USA’s NAVSTAR Global Position
 
 http://aprs.gids.nl/nmea/
 
+# Reduce power consumption
+
+
+When the Rasberry PI uses too much power, the WaveShare Hat does not connect the GSM network.
+
+## Turn off USB/LAN and HDMI output
+
+```diff
+--- /etc/rc.local.bak	2023-01-22 19:47:55.906202807 +0000
++++ /etc/rc.local	2023-01-22 19:49:30.933060657 +0000
+@@ -17,4 +17,11 @@
+   printf "My IP address is %s\n" "$_IP"
+ fi
+
++# Turn off USB/LAN
++# https://raspberrypi-guide.github.io/electronics/power-consumption-tricks
++echo '1-1' |sudo tee /sys/bus/usb/drivers/usb/unbind
++
++# Turn off HDMI output
++sudo /opt/vc/bin/tvservice -o
++
+ exit 0
+```
+
+
+## Disable BlueTooth
+
+
+```bash
+sudo systemctl disable hciuart.service
+sudo systemctl disable bluetooth.service
+```
+
+
+## Down-clock CPUs
+
+```diff
+--- /boot/config.txt.bak	2023-01-22 19:50:32.000000000 +0000
++++ /boot/config.txt	2023-01-22 21:02:28.000000000 +0000
+@@ -78,7 +78,15 @@
+
+ [pi4]
+ # Run as fast as firmware / board allows
+-arm_boost=1
++arm_boost=0
+
+ [all]
+ enable_uart=1
++
++# https://www.foxplex.com/sites/raspberry-pi-over-und-underclocking/
++arm_freq=700
++arm_freq_min=100
++core_freq=250
++core_freq_min=75
++sdram_freq=400
++over_voltage=0
+```
+
+## Just 1 CPU
+
+```diff
+--- /boot/cmdline.txt.bak	2023-01-22 21:01:02.000000000 +0000
++++ /boot/cmdline.txt	2023-01-22 21:02:04.000000000 +0000
+@@ -1 +1 @@
+-console=tty1 root=PARTUUID=a999dc5f-02 rootfstype=ext4 fsck.repair=yes rootwait
+\ No newline at end of file
++console=tty1 maxcpus=1 root=PARTUUID=a999dc5f-02 rootfstype=ext4 fsck.repair=yes rootwait
+```
+
 
 # Run at start-up
 
@@ -155,9 +224,41 @@ sudo systemctl enable drifter-diy.service # start on boot
 sudo systemctl start drifter-diy.service
 ```
 
+
+# Switch on/off
+
+* Connection via ssh
+
+``` bash
+sudo shutdown -h now
+```
+
+Wait that green led is off, then disconnect power supply.
+
+
 Add to `/etc/rc.local` the following before `exit 0`:
 
 ```bash
 pigpiod
 sudo -u pi stdbuf -oL julia /home/pi/drifter-raspberry-pi/drifter-diy.jl >> /var/log/drifter-diy.log  2>&1 &
 ```
+
+
+
+# Start-up sequence
+
+Approximate timings:
+
+* 4 min: to boot Rasberry Pi (under-clocked, with only 1 CPUs)
+* 30 s: start WaveShare Hat
+* 1 min: wait (so that peak power consumption does not coincides with GSM network registration)
+* 1 min: register to GSM network and send first SMS
+
+
+
+
+# Reference
+
+
+* https://raspberrypi-guide.github.io/electronics/power-consumption-tricks
+* https://www.dexterindustries.com/howto/run-a-program-on-your-raspberry-pi-at-startup/
