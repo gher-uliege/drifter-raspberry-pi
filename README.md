@@ -43,7 +43,7 @@ Pkg.add("LibSerialPort")
 
 
 
-Install other software:
+Install other software: pigpiod is a daemon for controling the general purpose I/O pins (GPIO)
 
 ```bash
 sudo apt-get install minicom p7zip-full git emacs-nox pigpiod
@@ -52,7 +52,7 @@ sudo systemctl enable pigpiod
 sudo systemctl start pigpiod
 ```
 
-`pigpiod` for GPIO
+
 
 ## Warm-up: On-board led blinking
 
