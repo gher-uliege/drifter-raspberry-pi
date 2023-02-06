@@ -80,6 +80,9 @@ end
 
 Idea: What about to implement [Morse code](https://en.wikipedia.org/wiki/Morse_code) ?
 
+##Minicom first tests
+sudo minicom -D /dev/ttyS0
+
 ## GSM Modem
 
 We will need the SIM card in its standard card size (25 mm by 15 mm).
