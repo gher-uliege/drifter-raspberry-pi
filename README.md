@@ -80,8 +80,21 @@ end
 
 Idea: What about to implement [Morse code](https://en.wikipedia.org/wiki/Morse_code) ?
 
-##Minicom first tests
+## Minicom first tests
 sudo minicom -D /dev/ttyS0
+
+- These commands should not return ERROR:
+AT
+
+AT+CPIN="XXXX"
+
+AT+CREG?
+
+- Command to call a phone number
+ATD0032XXXXXXXXX;
+
+Some CREG info: https://web.archive.org/web/20230121160033/https://docs.eseye.com/Content/ELS61/ATCommands/ELS61CREG.htm
+
 
 ## GSM Modem
 
