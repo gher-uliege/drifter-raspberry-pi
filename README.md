@@ -20,14 +20,14 @@ Determine the Raspberry pi IP address (see WiFi router access logs) and connect 
 
 These are the basic shell commands:
 
-```
-ls
-cd directory_name
-rm file_name
-cat /proc/cpuinfo
-wget some_url
-top
-```
+| Command  | Description  | 
+|---|---|
+| `ls` | list all files in current directory |
+| `cd directory_name` | change directory |
+| `rm file_name` | remove a file |
+| `cat /proc/cpuinfo` | see the content of a text file |
+| `wget some_url` | download a file from URL |
+| `top`  | see which process is running |
 
 
 ### Julia
@@ -104,10 +104,10 @@ All commands end with the characters `\r\n`. The basic commands used here are th
 | Command  | Description  | Return value |
 |---|---|---|
 | AT  | Test Modem  |  OK |
-| AT+CPIN? | | |
+| AT+CPIN? | Check if the SIM card is unlocked | |
 | AT+CPIN="1234" | Unlook SIM using pin 1234 | |
 | AT+CREG? | Network registration status | |
-| ATD0032XXXXXXXXX; | call a phone number 0032XXXXXXXXX (replacing all X by numbers) | |
+| ATD0032XXXXXXXXX; | Call a phone number 0032XXXXXXXXX (replacing all X by numbers) | |
 
 
 ## Minicom first tests
