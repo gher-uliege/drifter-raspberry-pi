@@ -16,7 +16,7 @@ In the advanced settings (Use `CTRL + SHIFT + X`), one should enable SSH, set a 
 
 ## First step
 
-Determine the Raspberry pi IP address and connect via SSH.
+Determine the Raspberry pi IP address (see WiFi router access logs) and connect via SSH.
 
 These are the basic shell commands:
 
