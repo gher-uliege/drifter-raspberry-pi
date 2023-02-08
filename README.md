@@ -33,9 +33,8 @@ top
 ### Julia
 
 
-Go to https://julialang.org/downloads/, download and install julia for aarch64.
+Go to https://julialang.org/downloads/, download and install julia for *aarch64*.
 
-https://julialang-s3.julialang.org/bin/linux/aarch64/1.8/julia-1.8.0-linux-aarch64.tar.gz
 
 ```julia
 using Pkg
