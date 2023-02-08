@@ -251,16 +251,6 @@ sudo shutdown -h now
 
 Wait that green led is off, then disconnect power supply.
 
-
-Add to `/etc/rc.local` the following before `exit 0`:
-
-```bash
-pigpiod
-sudo -u pi stdbuf -oL julia /home/pi/drifter-raspberry-pi/drifter-diy.jl >> /var/log/drifter-diy.log  2>&1 &
-```
-
-
-
 # Start-up sequence
 
 Approximate timings:
