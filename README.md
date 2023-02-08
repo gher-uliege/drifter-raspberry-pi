@@ -1,7 +1,24 @@
+## Installation
+
+### Operating System
+
+
+Installing raspberry pi Imager (https://www.raspberrypi.com/software/) in Ubuntu:
+
+```bash
+sudo dpkg -i imager_1.7.2_amd64.deb
+rpi-imager
+```
+
+And install Rapberry Pi OS Lite (64-bit) onto the SD coard. It is important (for julia) to select the 64-bit version.
+In the advanced settings (Use `CTRL + SHIFT + X`), one should enable SSH, set a SSH password, configure WiFi by setting the WiFi network name (ESSID) and password.
+
+
 ## First step
 
+Determine the Raspberry pi IP address and connect via SSH.
 
-First commands:
+These are the basic shell commands:
 
 ```
 ls
@@ -12,21 +29,6 @@ wget some_url
 top
 ```
 
-
-## Installation
-
-### Operating System
-
-
-Installing raspberry pi Imager (https://www.raspberrypi.com/software/)
-
-```bash
-sudo dpkg -i imager_1.7.2_amd64.deb
-rpi-imager
-```
-
-And install Rapberry Pi OS Lite (64-bit) onto the SD coard. It is  important to select the 64-bit version.
-In the advanced settings (Use `CTRL + SHIFT + X`), one should enable SSH, set a SSH password, configure WiFi by setting the WiFi network name (ESSID) and password.
 
 ### Julia
 
@@ -39,9 +41,6 @@ https://julialang-s3.julialang.org/bin/linux/aarch64/1.8/julia-1.8.0-linux-aarch
 using Pkg
 Pkg.add("LibSerialPort")
 ```
-
-
-
 
 Install other software: pigpiod is a daemon for controling the general purpose I/O pins (GPIO)
 
@@ -58,6 +57,12 @@ sudo systemctl start pigpiod
 
 
 Start Julia as root
+
+```bash
+sudo julia
+```
+
+Enter the following Julia commands:
 
 ```julia
 write("/sys/class/leds/led0/trigger","none")
@@ -80,20 +85,6 @@ end
 
 Idea: What about to implement [Morse code](https://en.wikipedia.org/wiki/Morse_code) ?
 
-## Minicom first tests
-sudo minicom -D /dev/ttyS0
-
-- These commands should not return ERROR:
-AT
-
-AT+CPIN="XXXX"
-
-AT+CREG?
-
-- Command to call a phone number
-ATD0032XXXXXXXXX;
-
-Some CREG info: https://web.archive.org/web/20230121160033/https://docs.eseye.com/Content/ELS61/ATCommands/ELS61CREG.htm
 
 
 ## GSM Modem
@@ -116,7 +107,29 @@ All commands end with the characters `\r\n`. The basic commands used here are th
 | AT  | Test Modem  |  OK |
 | AT+CPIN? | | |
 | AT+CPIN="1234" | Unlook SIM using pin 1234 | |
+| AT+CREG? | Network registration status | |
+| ATD0032XXXXXXXXX; | call a phone number 0032XXXXXXXXX (replacing all X by numbers) | |
 
+
+## Minicom first tests
+
+```bash
+sudo minicom -D /dev/ttyS0
+```
+
+- These commands should not return ERROR:
+AT
+
+AT+CPIN="XXXX"
+
+AT+CREG?
+
+- Command to call a phone number
+ATD0032XXXXXXXXX;
+
+Some CREG info: https://web.archive.org/web/20230121160033/https://docs.eseye.com/Content/ELS61/ATCommands/ELS61CREG.htm
+
+# Tests in Julia
 
 Open the serial port:
 
