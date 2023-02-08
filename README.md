@@ -98,7 +98,7 @@ We will need the SIM card in its standard card size (25 mm by 15 mm).
 
 The Modem uses a series of so called [AT commands](https://en.wikipedia.org/wiki/Hayes_command_set).
 All commands start with `AT` (meaning 'attention').
-All commands end with the characters `\r\n`. The basic commands used here are the following:
+All commands end with the characters `\r\n` (carriage return, line feed). The basic commands used here are the following:
 
 
 | Command  | Description  | Return value |
@@ -155,9 +155,12 @@ if bytesavailable(sp) > 0; println(String(read(sp))); end
 | Command  | Description  | Return value |
 |---|---|---|
 | AT+CMGF=1  | Set the format of messages to Text mode  |   |
-| AT+CSCA="some number"  |   |   |
-| AT+CMGS="phone_number" |   |   |
+| AT+CSCA="some number"  | set the SMS Service Center Address  |   |
+| AT+CMGS="phone_number" | send an SMS message to a GSM phone  (wait for the > prompt and terminate the message with [CTRL+Z](https://en.wikipedia.org/wiki/Substitute_character) |   |
 
+In Julia, SMS messages should be terminated by `"\x1a\r\n"` (CTRL+Z, carriage return, line feed)
+
+https://en.wikipedia.org/wiki/Substitute_character
 
 ### Global Navigation Satellite System (GNSS)
 
