@@ -158,9 +158,7 @@ if bytesavailable(sp) > 0; println(String(read(sp))); end
 | AT+CSCA="some number"  | set the SMS Service Center Address  |   |
 | AT+CMGS="phone_number" | send an SMS message to a GSM phone  (wait for the > prompt and terminate the message with [CTRL+Z](https://en.wikipedia.org/wiki/Substitute_character) |   |
 
-In Julia, SMS messages should be terminated by `"\x1a\r\n"` (CTRL+Z, carriage return, line feed)
-
-https://en.wikipedia.org/wiki/Substitute_character
+In Julia, SMS messages should be terminated by `"\x1a\r\n"` (CTRL+Z, carriage return, line feed).
 
 ### Global Navigation Satellite System (GNSS)
 
