@@ -16,26 +16,25 @@ In the advanced settings (Use `CTRL + SHIFT + X`), one should enable SSH, set a 
 
 ## First step
 
-Determine the Raspberry pi IP address and connect via SSH.
+Determine the Raspberry pi IP address (see WiFi router access logs) and connect via SSH.
 
 These are the basic shell commands:
 
-```
-ls
-cd directory_name
-rm file_name
-cat /proc/cpuinfo
-wget some_url
-top
-```
+| Command  | Description  | 
+|---|---|
+| `ls` | list all files in current directory |
+| `cd directory_name` | change directory |
+| `rm file_name` | remove a file |
+| `cat /proc/cpuinfo` | see the content of a text file |
+| `wget some_url` | download a file from URL |
+| `top`  | see which process is running |
 
 
 ### Julia
 
 
-Go to https://julialang.org/downloads/, download and install julia for aarch64.
+Go to https://julialang.org/downloads/, download and install julia for *aarch64*.
 
-https://julialang-s3.julialang.org/bin/linux/aarch64/1.8/julia-1.8.0-linux-aarch64.tar.gz
 
 ```julia
 using Pkg
@@ -99,16 +98,16 @@ We will need the SIM card in its standard card size (25 mm by 15 mm).
 
 The Modem uses a series of so called [AT commands](https://en.wikipedia.org/wiki/Hayes_command_set).
 All commands start with `AT` (meaning 'attention').
-All commands end with the characters `\r\n`. The basic commands used here are the following:
+All commands end with the characters `\r\n` (carriage return, line feed). The basic commands used here are the following:
 
 
 | Command  | Description  | Return value |
 |---|---|---|
 | AT  | Test Modem  |  OK |
-| AT+CPIN? | | |
+| AT+CPIN? | Check if the SIM card is unlocked | |
 | AT+CPIN="1234" | Unlook SIM using pin 1234 | |
 | AT+CREG? | Network registration status | |
-| ATD0032XXXXXXXXX; | call a phone number 0032XXXXXXXXX (replacing all X by numbers) | |
+| ATD0032XXXXXXXXX; | Call a phone number 0032XXXXXXXXX (replacing all X by numbers) | |
 
 
 ## Minicom first tests
@@ -156,9 +155,10 @@ if bytesavailable(sp) > 0; println(String(read(sp))); end
 | Command  | Description  | Return value |
 |---|---|---|
 | AT+CMGF=1  | Set the format of messages to Text mode  |   |
-| AT+CSCA="some number"  |   |   |
-| AT+CMGS="phone_number" |   |   |
+| AT+CSCA="some number"  | set the SMS Service Center Address  |   |
+| AT+CMGS="phone_number" | send an SMS message to a GSM phone  (wait for the > prompt and terminate the message with [CTRL+Z](https://en.wikipedia.org/wiki/Substitute_character) |   |
 
+In Julia, SMS messages should be terminated by `"\x1a\r\n"` (CTRL+Z, carriage return, line feed).
 
 ### Global Navigation Satellite System (GNSS)
 
