@@ -283,6 +283,16 @@ function enable_network(sp,APN)
 end
 
 """
+    # https://web.archive.org/web/20230121160033/https://docs.eseye.com/Content/ELS61/ATCommands/ELS61CREG.htm
+"""
+function registration_status(sp)
+    reg_status = cmd(sp,"AT+CREG?")
+    modus,status = parse.(Int,strip.(split(split(reg_status[1],':')[2],',')))
+    @info "registration status" reg_status
+
+    return modus,status
+end
+"""
 
 GSMHat.http(sp,method,url,data)
 """

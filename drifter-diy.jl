@@ -43,13 +43,11 @@ hostname = gethostname()
 
 while true
     # https://web.archive.org/web/20230121160033/https://docs.eseye.com/Content/ELS61/ATCommands/ELS61CREG.htm
-    reg_status = cmd(sp,"AT+CREG?")
-    modus,status = split(split(reg_status[1],':')[2],',')
-    @info "registration status" reg_status
-    if status in ("1","5")
+    modus,status = GSMHat.registration_status(sp)
+    if status in (1,5)
         break
     else
-        @info "registration status" reg_status
+        @info "registration status" modus, status
         sleep(20)
     end
 end
@@ -111,16 +109,20 @@ open(fname,"a+") do f
             end
         end
 
-        # get all SMS messages
-        messages = GSMHat.get_messages(sp)
-        @info "$(length(messages)) message(s)"
-        for message in messages
-            if strip(lowercase(message.sms_message_body)) == "status"
-                msg = "sigo vivo, estoy en $longitude, $latitude, $time"
-                @info "send status $msg"
-                push!(outbox_messages,msg)
-                GSMHat.delete_message(sp, message.index)
+        try
+            # get all SMS messages
+            messages = GSMHat.get_messages(sp)
+            @info "$(length(messages)) message(s)"
+            for message in messages
+                if strip(lowercase(message.sms_message_body)) == "status"
+                    msg = "sigo vivo, estoy en $longitude, $latitude, $time"
+                    @info "send status $msg"
+                    push!(outbox_messages,msg)
+                    GSMHat.delete_message(sp, message.index)
+                end
             end
+        catch err
+            @info "Error while reading SMS message" err
         end
 
 
