@@ -24,6 +24,7 @@ APN = config["access_point_network"]
 portname = config["portname"]
 baudrate = config["baudrate"]
 
+sleep(60)
 @info "phone number $phone_number"
 
 
