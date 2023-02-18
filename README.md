@@ -20,7 +20,7 @@ Determine the Raspberry pi IP address (see WiFi router access logs) and connect 
 
 These are the basic shell commands:
 
-| Command  | Description  | 
+| Command  | Description  |
 |---|---|
 | `ls` | list all files in current directory |
 | `cd directory_name` | change directory |
@@ -170,20 +170,20 @@ In Julia, SMS messages should be terminated by `"\x1a\r\n"` (CTRL+Z, carriage re
 Optional, test to send a SMS via minicom:
 
 ```
-AT+CPIN?                                                                                                                  
-+CPIN: READY                                                                                                              
-                                                                                                                          
-OK                                                                                                                        
-AT+CMGF=1                                                                                                                 
-OK                                                                                                                        
-AT+CSCA="0032475161616"                                                                                                   
-OK                                                                                                                        
-AT+CMGS="0032111111111"                                                                                                   
-> your message without special characters                                                                                                        
->                                                                                                                         
-+CMGS: 9                                                                                                                  
-                                                                                                                          
-OK                                                                                                                        
+AT+CPIN?
++CPIN: READY
+
+OK
+AT+CMGF=1
+OK
+AT+CSCA="0032475161616"
+OK
+AT+CMGS="0032111111111"
+> your message without special characters
+>
++CMGS: 9
+
+OK
 ```
 
 where `0032475161616` is the SMS Service Center Address and `0032111111111` its the recipient CSM phone number.
