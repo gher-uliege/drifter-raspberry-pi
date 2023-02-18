@@ -39,6 +39,9 @@ Go to https://julialang.org/downloads/, download and install julia for *aarch64*
 ```julia
 using Pkg
 Pkg.add("LibSerialPort")
+Pkg.add("PiGPIO")
+Pkg.add("URIs")
+Pkg.add("StringEncodings")
 ```
 
 Install other software: pigpiod is a daemon for controling the general purpose I/O pins (GPIO)
@@ -112,6 +115,8 @@ All commands end with the characters `\r\n` (carriage return, line feed). The ba
 
 ## Minicom first tests
 
+First, start the Waveshare HAT (long push on power button PWRKEY)
+
 ```bash
 sudo minicom -D /dev/ttyS0
 ```
@@ -127,6 +132,8 @@ AT+CREG?
 ATD0032XXXXXXXXX;
 
 Some CREG info: https://web.archive.org/web/20230121160033/https://docs.eseye.com/Content/ELS61/ATCommands/ELS61CREG.htm
+
+To exit minicom, Ctrl+A x
 
 # Tests in Julia
 
