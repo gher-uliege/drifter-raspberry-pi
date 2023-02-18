@@ -28,8 +28,8 @@ sleep(60)
 @info "phone number $phone_number"
 
 
-sp = GSMHat.init(portname, baudrate; pin=pin)
-
+sp = GSMHat.init(portname, baudrate; pin=pin,
+         local_SMS_service_center=local_SMS_service_center)
 
 # power GNSS  on
 @info "enable GNSS"

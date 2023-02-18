@@ -223,7 +223,7 @@ end
 Initialize the WaveShare GSM/GNSS/GPRS Hat pull pin 4 (mapping to port 7) high for 4 seconds and
 unlock the SIM card if `pin` is provided.
 """
-function init(portname, baudrate; pin=nothing)
+function init(portname, baudrate; pin=nothing, local_SMS_service_center = nothing)
     # check if modem is on
     sp = LibSerialPort.open(portname, baudrate)
     write(sp,"AT\r\n")
@@ -253,6 +253,11 @@ function init(portname, baudrate; pin=nothing)
 
     @info "selects the character set $(GSMHat.ENCODING)"
     cmd(sp,"AT+CSCS=\"$(GSMHat.ENCODING)\"")
+
+    if local_SMS_service_center != nothing
+       @debug "set local SMS service center"
+       cmd(sp, "AT+CSCA=\"$local_SMS_service_center\"")
+    end
 
     return sp
 end
