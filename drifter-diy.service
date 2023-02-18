@@ -1,0 +1,14 @@
+[Unit]
+Description=drifter-diy
+After=pigpiod.service
+
+[Service]
+ExecStart=/usr/local/bin/julia /home/pi/drifter-raspberry-pi/drifter-diy.jl
+WorkingDirectory=/home/pi/drifter-raspberry-pi
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
