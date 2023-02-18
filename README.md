@@ -44,6 +44,13 @@ Pkg.add("URIs")
 Pkg.add("StringEncodings")
 ```
 
+
+Create the folder `~/.julia/config/` and the file `~/.julia/config/startup.jl` with the content:
+
+```julia
+push!(LOAD_PATH, joinpath(ENV["HOME"],"drifter-raspberry-pi"))
+```
+
 Install other software: pigpiod is a daemon for controling the general purpose I/O pins (GPIO)
 
 ```bash
@@ -53,7 +60,11 @@ sudo systemctl enable pigpiod
 sudo systemctl start pigpiod
 ```
 
+Get the source code:
 
+```bash
+git clone https://github.com/gher-uliege/drifter-raspberry-pi.git
+```
 
 ## Warm-up: On-board led blinking
 
@@ -283,6 +294,12 @@ sudo systemctl enable drifter-diy.service # start on boot
 sudo systemctl start drifter-diy.service
 ```
 
+
+See the log output:
+
+```
+journalctl -u drifter-diy.service -f
+```
 
 # Switch on/off
 
