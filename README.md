@@ -112,6 +112,8 @@ All commands end with the characters `\r\n` (carriage return, line feed). The ba
 
 ## Minicom first tests
 
+First, start the Waveshare HAT (long push on power button PWRKEY)
+
 ```bash
 sudo minicom -D /dev/ttyS0
 ```
