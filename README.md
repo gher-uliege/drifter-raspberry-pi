@@ -39,6 +39,9 @@ Go to https://julialang.org/downloads/, download and install julia for *aarch64*
 ```julia
 using Pkg
 Pkg.add("LibSerialPort")
+Pkg.add("PiGPIO")
+Pkg.add("URIs")
+Pkg.add("StringEncodings")
 ```
 
 Install other software: pigpiod is a daemon for controling the general purpose I/O pins (GPIO)
