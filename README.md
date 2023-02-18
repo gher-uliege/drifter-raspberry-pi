@@ -130,6 +130,8 @@ ATD0032XXXXXXXXX;
 
 Some CREG info: https://web.archive.org/web/20230121160033/https://docs.eseye.com/Content/ELS61/ATCommands/ELS61CREG.htm
 
+To exit minicom, Ctrl+A x
+
 # Tests in Julia
 
 Open the serial port:
