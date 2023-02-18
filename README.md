@@ -295,6 +295,12 @@ sudo systemctl start drifter-diy.service
 ```
 
 
+See the log output:
+
+```
+journalctl -u drifter-diy.service -f
+```
+
 # Switch on/off
 
 * Connection via ssh
