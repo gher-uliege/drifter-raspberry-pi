@@ -263,6 +263,8 @@ sudo systemctl disable bluetooth.service
 
 ## Just 1 CPU
 
+Add `maxcpus=1` to this file, keep the rest of the line. Do __not__ change the identifier following `root=PARTUUID=`.
+
 ```diff
 --- /boot/cmdline.txt.bak	2023-01-22 21:01:02.000000000 +0000
 +++ /boot/cmdline.txt	2023-01-22 21:02:04.000000000 +0000
