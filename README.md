@@ -44,6 +44,13 @@ Pkg.add("URIs")
 Pkg.add("StringEncodings")
 ```
 
+
+Create the folder `~/.julia/config/` and the file `~/.julia/config/startup.jl` with the content:
+
+```julia
+push!(LOAD_PATH, joinpath(ENV["HOME"],"drifter-raspberry-pi"))
+```
+
 Install other software: pigpiod is a daemon for controling the general purpose I/O pins (GPIO)
 
 ```bash
