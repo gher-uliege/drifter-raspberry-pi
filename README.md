@@ -60,7 +60,11 @@ sudo systemctl enable pigpiod
 sudo systemctl start pigpiod
 ```
 
+Get the source code:
 
+```bash
+git clone https://github.com/gher-uliege/drifter-raspberry-pi.git
+```
 
 ## Warm-up: On-board led blinking
 
