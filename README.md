@@ -167,6 +167,27 @@ if bytesavailable(sp) > 0; println(String(read(sp))); end
 
 In Julia, SMS messages should be terminated by `"\x1a\r\n"` (CTRL+Z, carriage return, line feed).
 
+Optional, test to send a SMS via minicom:
+
+```
+AT+CPIN?                                                                                                                  
++CPIN: READY                                                                                                              
+                                                                                                                          
+OK                                                                                                                        
+AT+CMGF=1                                                                                                                 
+OK                                                                                                                        
+AT+CSCA="0032475161616"                                                                                                   
+OK                                                                                                                        
+AT+CMGS="0032111111111"                                                                                                   
+> your message without special characters                                                                                                        
+>                                                                                                                         
++CMGS: 9                                                                                                                  
+                                                                                                                          
+OK                                                                                                                        
+```
+
+where `0032475161616` is the SMS Service Center Address and `0032111111111` its the recipient CSM phone number.
+
 ### Global Navigation Satellite System (GNSS)
 
 Examples of GNSS include Europe’s Galileo, the USA’s NAVSTAR Global Positioning System (GPS), Russia’s Global'naya Navigatsionnaya Sputnikovaya Sistema (GLONASS) and China’s BeiDou Navigation Satellite System.
