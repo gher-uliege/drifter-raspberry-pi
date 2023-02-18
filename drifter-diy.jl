@@ -138,7 +138,7 @@ open(fname,"a+") do f
                 sms_retry = 0
                 pop!(outbox_messages)
             catch err
-                @info "catched error (try $i)" err
+                @info "catched error" err
                 sms_retry = sms_retry+1
             end
 
