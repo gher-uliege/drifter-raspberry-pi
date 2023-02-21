@@ -251,21 +251,20 @@ sudo systemctl disable bluetooth.service
 ## Down-clock CPUs
 
 ```diff
---- /boot/config.txt.bak	2023-01-22 19:50:32.000000000 +0000
-+++ /boot/config.txt	2023-01-22 21:02:28.000000000 +0000
-@@ -78,7 +78,15 @@
-
+--- /boot/config.txt.bak	2023-02-18 15:30:02.000000000 +0000
++++ /boot/config.txt	2023-02-21 20:28:54.000000000 +0000
+@@ -78,7 +78,14 @@
+ 
  [pi4]
  # Run as fast as firmware / board allows
 -arm_boost=1
 +arm_boost=0
-
+ 
  [all]
  enable_uart=1
 +
 +# https://www.foxplex.com/sites/raspberry-pi-over-und-underclocking/
 +arm_freq=700
-+arm_freq_min=100
 +core_freq=250
 +core_freq_min=75
 +sdram_freq=400
