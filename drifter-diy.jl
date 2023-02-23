@@ -24,7 +24,9 @@ APN = config["access_point_network"]
 portname = config["portname"]
 baudrate = config["baudrate"]
 
+@info "wait 60s"
 sleep(60)
+
 @info "phone number $phone_number"
 
 
@@ -58,6 +60,7 @@ end
 outbox_messages = []
 
 message = "$hostname ready, switching GNSS on"
+@info "about to send" message
 push!(outbox_messages,message)
 
 last_message = DateTime(1,1,1)
@@ -98,6 +101,7 @@ open(fname,"a+") do f
         if !isnothing(time) && !isnothing(latitude) && !isnothing(longitude)
             if now - last_message >  dt_message
                 message = "sigo vivo, estoy en $longitude, $latitude, $time"
+                @info "about to send" message
                 push!(outbox_messages,message)
                 last_message = now
             end
@@ -116,7 +120,7 @@ open(fname,"a+") do f
             for message in messages
                 if strip(lowercase(message.sms_message_body)) == "status"
                     msg = "sigo vivo, estoy en $longitude, $latitude, $time"
-                    @info "send status $msg"
+                    @info "about to send" msg
                     push!(outbox_messages,msg)
                     GSMHat.delete_message(sp, message.index)
                 end
@@ -132,11 +136,11 @@ open(fname,"a+") do f
             message_send = false
 
             try
-                @info "sending: $message"
+                @info "sending" message
                 send_message(sp,phone_number,local_SMS_service_center,message)
                 message_send = true
                 sms_retry = 0
-                pop!(outbox_messages)
+                popfirst!(outbox_messages)
             catch err
                 @info "catched error" err
                 sms_retry = sms_retry+1
@@ -163,6 +167,11 @@ open(fname,"a+") do f
         else
             # short sleep
             sleep(min(dt_save,dt_message,dt_pending_tasks))
+        end
+
+        if bytesavailable(sp) > 0;
+            # check if output pending, like new SMS arrived
+            @info "output" String(read(sp))
         end
     end
 end
