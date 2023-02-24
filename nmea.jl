@@ -1,4 +1,21 @@
 using Dates
+using Test
+
+
+function parse_ll(s)
+    x = tryparse(Float64,s)
+
+    if !isnothing(x)
+        min = x - floor(Int,x/100)*100
+        return floor(Int,x/100) + min/60
+    else
+        return nothing
+    end
+end
+
+#=
+parse_ll("5012.345") ≈ 50 + 12.345/60
+=#
 
 function parse_nmea(line)
     if line == ""
@@ -7,7 +24,7 @@ function parse_nmea(line)
     @show line
     if occursin('*',line)
         line_,checksum = split(line,'*',limit=2)
-        
+
         calculated_checksum =  reduce(xor,UInt8.(collect(line_[2:end])))
 
         if string(calculated_checksum,base=16,pad=2) != lowercase(checksum)
@@ -15,39 +32,32 @@ function parse_nmea(line)
             return nothing
         end
     end
-    
+
     parts = split(line_,',')
 
     if length(parts) == 0
         return nothing
     end
-    
+
     if parts[1] == "\$GPGLL"
         if length(parts) != 8
             return nothing
         end
 
-        lat = tryparse(Float64,parts[2])
+        lat = parse_ll(parts[2])
         isnorth = parts[3] == "N"
-        lon = tryparse(Float64,parts[4])
+        lon = parse_ll(parts[4])
         iseast = parts[5] == "E"
         time_utc = Time(parts[6],"HHMMSS.ss")
         status = parts[7]
-        valid = parts[8]                   
+        valid = parts[8]
 
-        if !isnothing(lon)
-            lon /= 100
-            if !isnorth
-                lon = -lon
-            end
+        if !isnothing(lon) && !isnorth
+            lon = -lon
         end
 
-        if !isnothing(lat)
-            lat /= 100
-
-            if  !iseast
-                lat = -lat
-            end
+        if !isnothing(lat) && !iseast
+            lat = -lat
         end
 
         return (; lon, lat, time_utc, status, valid)
@@ -78,8 +88,8 @@ struct NMEADevice
 end
 
 function NMEADevice(devicename::String)
-    dev = open(devicename,"r")     
-    dev_lines = eachline(dev)        
+    dev = open(devicename,"r")
+    dev_lines = eachline(dev)
     state = nothing
     NMEADevice(devicename,dev_lines,state)
 end
@@ -107,7 +117,7 @@ end
 line,state = iterate(dev_lines)
 
 state,line = iterate(dev_lines)
-  
+
 =#
 
 line = "\$GPGLL,5033.11111,N,00534.11111,E,161708.00,A,A*67"
@@ -127,7 +137,7 @@ while true
         @show pos
         longitude = pos.lon
         latitude = pos.lat
-        
+
         println(f,time,",",longitude,",",latitude)
         flush(f)
 
