@@ -4,7 +4,7 @@ function parse_nmea(line)
     if line == ""
         return nothing
     end
-#    @show line
+    @show line
     if occursin('*',line)
         line_,checksum = split(line,'*',limit=2)
         
@@ -28,9 +28,9 @@ function parse_nmea(line)
         end
 
         lat = tryparse(Float64,parts[2])
-        isnorth = parts[3] == 'N'
+        isnorth = parts[3] == "N"
         lon = tryparse(Float64,parts[4])
-        iseast = parts[5] == 'E'
+        iseast = parts[5] == "E"
         time_utc = Time(parts[6],"HHMMSS.ss")
         status = parts[7]
         valid = parts[8]                   
@@ -119,7 +119,7 @@ fname = expanduser("~/track-gps-$hostname-$(Dates.format(Dates.now(),"yyyymmddTH
 
 f = open(fname,"w")
 
-for i = 1:100
+while true
     pos = position(dev)
     time = Dates.now()
 
@@ -131,7 +131,7 @@ for i = 1:100
         println(f,time,",",longitude,",",latitude)
         flush(f)
 
-        sleep(10)
+        sleep(60)
     end    
 end
 
