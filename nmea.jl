@@ -15,7 +15,37 @@ end
 
 #=
 parse_ll("5012.345") ≈ 50 + 12.345/60
+
+line = "$GPRMC,220516,A,5133.82,N,00042.24,W,173.8,231.8,130694,004.2,W*70"
+
 =#
+function parse_rmc(parts)
+
+end
+
+function parse_gll(parts)
+        if length(parts) != 8
+            return nothing
+        end
+
+        lat = parse_ll(parts[2])
+        isnorth = parts[3] == "N"
+        lon = parse_ll(parts[4])
+        iseast = parts[5] == "E"
+        time_utc = Time(parts[6],"HHMMSS.ss")
+        status = parts[7]
+        valid = parts[8]
+
+        if !isnothing(lon) && !isnorth
+            lon = -lon
+        end
+
+        if !isnothing(lat) && !iseast
+            lat = -lat
+        end
+
+        return (; lon, lat, time_utc, status, valid)
+end
 
 function parse_nmea(line)
     if line == ""
@@ -39,28 +69,10 @@ function parse_nmea(line)
         return nothing
     end
 
-    if parts[1] == "\$GPGLL"
-        if length(parts) != 8
-            return nothing
-        end
-
-        lat = parse_ll(parts[2])
-        isnorth = parts[3] == "N"
-        lon = parse_ll(parts[4])
-        iseast = parts[5] == "E"
-        time_utc = Time(parts[6],"HHMMSS.ss")
-        status = parts[7]
-        valid = parts[8]
-
-        if !isnothing(lon) && !isnorth
-            lon = -lon
-        end
-
-        if !isnothing(lat) && !iseast
-            lat = -lat
-        end
-
-        return (; lon, lat, time_utc, status, valid)
+    if parts[1] == "\$GPRMC"
+       parse_rmc(parts)
+    elseif parts[1] == "\$GPGLL"
+       parse_gll(parts)
     end
     return nothing
 end
@@ -142,7 +154,7 @@ while true
         flush(f)
 
         sleep(60)
-    end    
+    end
 end
 
 close(f)
