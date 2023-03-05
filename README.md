@@ -42,6 +42,7 @@ Pkg.add("LibSerialPort")
 Pkg.add("PiGPIO")
 Pkg.add("URIs")
 Pkg.add("StringEncodings")
+Pkg.add("NMEA")
 ```
 
 
