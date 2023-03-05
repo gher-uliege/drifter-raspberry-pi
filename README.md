@@ -2,16 +2,17 @@
 
 ### Operating System
 
-
-Installing raspberry pi Imager (https://www.raspberrypi.com/software/) in Ubuntu:
+* You need a compute with a SD card reader
+* Installing [raspberry pi Imager](https://www.raspberrypi.com/software/) and follow the instruction on this page.
+* For Ubuntu, install the deb file with:
 
 ```bash
 sudo dpkg -i imager_1.7.2_amd64.deb
 rpi-imager
 ```
 
-And install Rapberry Pi OS Lite (64-bit) onto the SD coard. It is important (for julia) to select the 64-bit version.
-In the advanced settings (Use `CTRL + SHIFT + X`), one should enable SSH, set a SSH password, configure WiFi by setting the WiFi network name (ESSID) and password.
+* Install **Rapberry Pi OS Lite (64-bit)** onto the SD coard. It is important (for julia) to select the 64-bit version.
+* In the advanced settings (Use `CTRL + SHIFT + X`), one should enable SSH, set a SSH password, configure WiFi by setting the WiFi network name (ESSID) and password.
 
 
 ## First step
