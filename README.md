@@ -2,7 +2,7 @@
 
 ### Operating System
 
-
+* You need a compute with a SD card reader
 * Installing [raspberry pi Imager](https://www.raspberrypi.com/software/) and follow the instruction on this page.
 * For Ubuntu, install the deb file with:
 
