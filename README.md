@@ -65,22 +65,22 @@ These are the basic shell commands:
 Go to https://julialang.org/downloads/, *copy* the download link for julia for *aarch64*. Download julia directly on the Rasbperry Pi:
 
 ```bash
-wget URL
+wget https://julialang-s3.julialang.org/bin/linux/aarch64/1.8/julia-1.8.5-linux-aarch64.tar.gz
 ```
 
-where `URL` the julia archive from the https://julialang.org/downloads/.
+1.8.5 is the current stable version (as of March 2023). 
 
 ```bash
-sudo tar -C /opt -xvf FILE_NAME
+sudo tar -C /opt -xvf julia-1.8.5-linux-aarch64.tar.gz
 ```
 
-where `FILE_NAME` is the downloaded file.
+where `julia-1.8.5-linux-aarch64.tar.gz` is the downloaded file.
 
 ```bash
-sudo ln -s /opt/julia-XYZ/bin/julia /usr/local/bin
+sudo ln -s /opt/julia-1.8.5/bin/julia /usr/local/bin
 ```
 
-where `julia-XYZ` is the directory that was created when extracting the compressed archive.
+where `julia-1.8.5` is the directory that was created when extracting the compressed archive.
 Start Julia by runnng `julia` and install the following package:
 
 ```julia
