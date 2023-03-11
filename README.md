@@ -7,7 +7,7 @@ Raspberry Pi hardware (source: https://www.raspberrypi.com/)
 ### Operating System
 
 * You need a compute with a SD card reader
-* Installing [raspberry pi Imager](https://www.raspberrypi.com/software/) and follow the instruction on this page.
+* Installing [raspberry pi Imager](https://www.raspberrypi.com/software/) and follow the instructions on this page.
 * For Ubuntu, install the deb file with:
 
 ```bash
@@ -15,7 +15,7 @@ sudo dpkg -i imager_1.7.2_amd64.deb
 rpi-imager
 ```
 
-* Install **Rapberry Pi OS Lite (64-bit)** onto the SD coard. It is important (for julia) to select the 64-bit version.
+* Install **Rapberry Pi OS Lite (64-bit)** onto the SD card. It is important (for julia) to select the 64-bit version.
 * In the advanced settings (Use `CTRL + SHIFT + X`), see https://github.com/gher-uliege/drifter-raspberry-pi/tree/main/img for screenshots.
      * hostname in the form of `drifterXY` (for example dirfter02, but everybody should use a different number).
      * one enable SSH (use password authentication)
@@ -25,10 +25,10 @@ rpi-imager
      * WiFi password:  (will be provided, __different from your account password__)
      * Time zone: Europe/Brussels
      * Make sure that Enable Telemetry is __unchecked__. 
-* Put the SD card, in the SD card slot of the Rapberry Pi
-* Power-on the Rapberry Pi (via the USB C connector)
+* Put the SD card in the SD card slot of the Rapberry Pi
+* Power-on the Raspberry Pi (via the USB C connector)
 
-## Connect to the Raspberry pi
+## Connect to the Raspberry Pi
 
 * Determine the Raspberry pi IP address (see WiFi router access logs) 
 * Open a terminal:
@@ -36,14 +36,14 @@ rpi-imager
      * [Mac OS](https://support.apple.com/guide/terminal/open-or-quit-terminal-apd5265185d-f365-44cb-8b09-71a064a42125/mac)
      * [Windows](https://learn.microsoft.com/en-us/powershell/scripting/windows-powershell/starting-windows-powershell?view=powershell-7.3#from-the-start-menu) and  see also [Get started with OpenSSH for Windows](https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse?tabs=gui)      
 * Make sure that you find the keyboard shortcut to copy and paste commands to the terminal
-* __Connect your laptop to the same WiFi network as the raspbery Pi__ (this is important, otherwise you cannot connect to the Raspberry Pi) 
+* __Connect your laptop to the same WiFi network as the Raspbery Pi__ (this is important, otherwise you cannot connect to the Raspberry Pi) 
 * Connect via SSH:
 
 ```bash
 ssh pi@192.168.1.6
 ```
 
-where `192.168.1.6` should be the IP adress from the routers admin page. This IP address will be different for every  Raspberry pi.
+where `192.168.1.6` should be the IP adress from the routers admin page. This IP address will be different for every Raspberry Pi.
 
 ## First step
 
@@ -82,7 +82,7 @@ sudo ln -s /opt/julia-1.8.5/bin/julia /usr/local/bin
 ```
 
 where `julia-1.8.5` is the directory that was created when extracting the compressed archive.
-Start Julia by runnng `julia` and install the following package:
+Start Julia by running `julia` and install the following packages:
 
 ```julia
 using Pkg
@@ -101,7 +101,7 @@ mkdir ~/.julia/config/
 nano ~/.julia/config/startup.jl
 ```
 
-[Here](https://www.nano-editor.org/dist/latest/cheatsheet.html) is a list of shortcuts of nano.
+[Here](https://www.nano-editor.org/dist/latest/cheatsheet.html) is a list of shortcuts for nano.
 
 The file  `~/.julia/config/startup.jl` should have the following content:
 
@@ -154,19 +154,19 @@ while true;
 end
 ```
 
-Idea: What about to implement [Morse code](https://en.wikipedia.org/wiki/Morse_code) ?
+Idea: What about implementing [Morse code](https://en.wikipedia.org/wiki/Morse_code) ?
 
 ## GSM Modem
 
 We will need the SIM card in its standard card size (25 mm by 15 mm).
 
-* Place the SIM card in the WaveShare Hat (gently, very gently)
+* Place the SIM card in the WaveShare HAT (gently, very gently)
 * Connect the GNSS (GPS) and GSM atennas to the Modem
-* Connect the WaveShare Model with the Rasbperry Pi and fix with srews
+* Connect the WaveShare HAT with the Rasbperry Pi and fix with screws
 * Power on the Rasbperry Pi
-* Power on the WaveShare Hat
+* Power on the WaveShare HAT
 
-The Modem uses a series of so called [AT commands](https://en.wikipedia.org/wiki/Hayes_command_set).
+The Modem uses a series of so-called [AT commands](https://en.wikipedia.org/wiki/Hayes_command_set).
 All commands start with `AT` (meaning 'attention').
 All commands end with the characters `\r\n` (carriage return, line feed). The basic commands used here are the following:
 
