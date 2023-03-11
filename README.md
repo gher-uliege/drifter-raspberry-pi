@@ -17,14 +17,14 @@ rpi-imager
 
 * Install **Rapberry Pi OS Lite (64-bit)** onto the SD coard. It is important (for julia) to select the 64-bit version.
 * In the advanced settings (Use `CTRL + SHIFT + X`), see https://github.com/gher-uliege/drifter-raspberry-pi/tree/main/img for screenshots.
-     * hostname in the form of drifterXY (for example dirfter02, but everybody should use a different number).
+     * hostname in the form of `drifterXY` (for example dirfter02, but everybody should use a different number).
      * one enable SSH (use password authentication)
      * set username: `pi` (keep default)
      * set password: (will be provided) 
      * SSID: __TP-Link_1465__
-     * WiFi password:  (will be provided, *different from your account password*)
+     * WiFi password:  (will be provided, __different from your account password__)
      * Time zone: Europe/Brussels
-     * Make sure to *uncheck* Enable Telemetry.
+     * Make sure that Enable Telemetry is __unchecked__. 
 * Put the SD card, in the SD card slot of the Rapberry Pi
 * Power-on the Rapberry Pi (via the USB C connector)
 
