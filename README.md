@@ -16,12 +16,28 @@ rpi-imager
 ```
 
 * Install **Rapberry Pi OS Lite (64-bit)** onto the SD coard. It is important (for julia) to select the 64-bit version.
-* In the advanced settings (Use `CTRL + SHIFT + X`), one should enable SSH, set a SSH password, configure WiFi by setting the WiFi network name (ESSID) and password.
+* In the advanced settings (Use `CTRL + SHIFT + X`), 
+      * one should enable SSH,
+      * set a SSH password, 
+      * configure WiFi by setting the WiFi network name (ESSID) and password.
+      * hostname in the form of drifterXY.
+* Put the SD card, in the SD card slot of the Rapberry Pi
+* Power-on the Rapberry Pi (via the USB C connector)
 
+## Connect to the Raspberry pi
+
+* Determine the Raspberry pi IP address (see WiFi router access logs) 
+* __Connect your laptop to the same WiFi network as the raspbery Pi__ (this is important, otherwise you cannot connect to the Raspberry Pi) 
+* Open a terminal (in Windows a Power Shell terminal), and connect via SSH:
+
+```bash
+ssh pi@192.168.1.6
+```
+
+where `192.168.1.6` should be the IP adress from the routers admin page. This IP address will be different for every  Raspberry pi.
 
 ## First step
 
-Determine the Raspberry pi IP address (see WiFi router access logs) and connect via SSH.
 
 These are the basic shell commands:
 
@@ -38,8 +54,26 @@ These are the basic shell commands:
 ### Julia
 
 
-Go to https://julialang.org/downloads/, download and install julia for *aarch64*.
+Go to https://julialang.org/downloads/, *copy* the download link for julia for *aarch64*. Download julia directly on the Rasbperry Pi:
 
+```bash
+wget URL
+```
+
+where `URL` the julia archive from the https://julialang.org/downloads/.
+
+```bash
+sudo tar -C /opt -xvf FILE_NAME
+```
+
+where `FILE_NAME` is the downloaded file.
+
+```bash
+sudo ln -s /opt/julia-XYZ/bin/julia /usr/local/bin
+```
+
+where `julia-XYZ` is the directory that was created when extracting the compressed archive.
+Start Julia by runnng `julia` and install the following package:
 
 ```julia
 using Pkg
@@ -57,7 +91,7 @@ Create the folder `~/.julia/config/` and the file `~/.julia/config/startup.jl` w
 push!(LOAD_PATH, joinpath(ENV["HOME"],"drifter-raspberry-pi"))
 ```
 
-Install other software: pigpiod is a daemon for controling the general purpose I/O pins (GPIO)
+Install other software: pigpiod is a daemon for controling the general purpose I/O pins (GPIO). We also set the timezone to UTC.
 
 ```bash
 sudo apt-get install minicom p7zip-full git emacs-nox pigpiod
@@ -103,8 +137,6 @@ end
 ```
 
 Idea: What about to implement [Morse code](https://en.wikipedia.org/wiki/Morse_code) ?
-
-
 
 ## GSM Modem
 
