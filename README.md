@@ -35,6 +35,7 @@ rpi-imager
      * [Ubuntu/Linux](https://ubuntu.com/tutorials/command-line-for-beginners#3-opening-a-terminal)
      * [Mac OS](https://support.apple.com/guide/terminal/open-or-quit-terminal-apd5265185d-f365-44cb-8b09-71a064a42125/mac)
      * [Windows](https://learn.microsoft.com/en-us/powershell/scripting/windows-powershell/starting-windows-powershell?view=powershell-7.3#from-the-start-menu) and  see also [Get started with OpenSSH for Windows](https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse?tabs=gui)      
+* Make sure that you find the keyboard shortcut to copy and paste commands to the terminal
 * __Connect your laptop to the same WiFi network as the raspbery Pi__ (this is important, otherwise you cannot connect to the Raspberry Pi) 
 * Connect via SSH:
 
@@ -93,7 +94,16 @@ Pkg.add("NMEA")
 ```
 
 
-Create the folder `~/.julia/config/` and the file `~/.julia/config/startup.jl` with the content:
+Create the folder `~/.julia/config/` and the file `~/.julia/config/startup.jl` with a text editor like nano, emacs or vim.
+
+```bash
+mkdir ~/.julia/config/
+nano ~/.julia/config/startup.jl
+```
+
+[Here](https://www.nano-editor.org/dist/latest/cheatsheet.html) is a list of shortcuts of nano.
+
+The file  `~/.julia/config/startup.jl` should have the following content:
 
 ```julia
 push!(LOAD_PATH, joinpath(ENV["HOME"],"drifter-raspberry-pi"))
