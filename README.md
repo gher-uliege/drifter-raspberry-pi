@@ -17,18 +17,22 @@ rpi-imager
 
 * Install **Rapberry Pi OS Lite (64-bit)** onto the SD coard. It is important (for julia) to select the 64-bit version.
 * In the advanced settings (Use `CTRL + SHIFT + X`), 
-      * one should enable SSH,
-      * set a SSH password, 
-      * configure WiFi by setting the WiFi network name (ESSID) and password.
-      * hostname in the form of drifterXY.
+     * one should enable SSH,
+     * set a SSH password, 
+     * configure WiFi by setting the WiFi network name (ESSID) and password.
+     * hostname in the form of drifterXY.
 * Put the SD card, in the SD card slot of the Rapberry Pi
 * Power-on the Rapberry Pi (via the USB C connector)
 
 ## Connect to the Raspberry pi
 
 * Determine the Raspberry pi IP address (see WiFi router access logs) 
+* Open a terminal:
+     * [Ubuntu/Linux](https://ubuntu.com/tutorials/command-line-for-beginners#3-opening-a-terminal)
+     * [Mac OS](https://support.apple.com/guide/terminal/open-or-quit-terminal-apd5265185d-f365-44cb-8b09-71a064a42125/mac)
+     * [Windows](https://learn.microsoft.com/en-us/powershell/scripting/windows-powershell/starting-windows-powershell?view=powershell-7.3#from-the-start-menu) and  see also [Get started with OpenSSH for Windows](https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse?tabs=gui)      
 * __Connect your laptop to the same WiFi network as the raspbery Pi__ (this is important, otherwise you cannot connect to the Raspberry Pi) 
-* Open a terminal (in Windows a Power Shell terminal), and connect via SSH:
+* Connect via SSH:
 
 ```bash
 ssh pi@192.168.1.6
