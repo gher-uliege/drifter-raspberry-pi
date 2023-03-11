@@ -1,5 +1,9 @@
 ## Installation
 
+![raspberry-pi-4-labelled](img/raspberry-pi-4-labelled.png)
+
+Raspberry Pi hardware (source: https://www.raspberrypi.com/)
+
 ### Operating System
 
 * You need a compute with a SD card reader
