@@ -15,9 +15,11 @@ sudo dpkg -i imager_1.7.2_amd64.deb
 rpi-imager
 ```
 
-* Install **Rapberry Pi OS Lite (64-bit)** onto the SD card. It is important (for julia) to select the 64-bit version.
+* Install **Rapberry Pi OS Lite (64-bit)** onto the SD card.
+     * It is important (for julia) to select the 64-bit version.
+     * The "Lite" version means that a desktop environement (which we do not need) is not pre-installed.
 * In the advanced settings (Use `CTRL + SHIFT + X`), see https://github.com/gher-uliege/drifter-raspberry-pi/tree/main/img for screenshots.
-     * hostname in the form of `drifterXY` (for example dirfter02, but everybody should use a different number).
+     * hostname in the form of `drifterXY` (for example dirfter02, but everybody should use a different number, replace XY with your 2-digit group number).
      * one enable SSH (use password authentication)
      * set username: `pi` (keep default)
      * set password: (will be provided) 
@@ -35,7 +37,6 @@ rpi-imager
      * [Ubuntu/Linux](https://ubuntu.com/tutorials/command-line-for-beginners#3-opening-a-terminal)
      * [Mac OS](https://support.apple.com/guide/terminal/open-or-quit-terminal-apd5265185d-f365-44cb-8b09-71a064a42125/mac)
      * [Windows](https://learn.microsoft.com/en-us/powershell/scripting/windows-powershell/starting-windows-powershell?view=powershell-7.3#from-the-start-menu) and  see also [Get started with OpenSSH for Windows](https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse?tabs=gui)      
-* Make sure that you find the keyboard shortcut to copy and paste commands to the terminal
 * __Connect your laptop to the same WiFi network as the Raspbery Pi__ (this is important, otherwise you cannot connect to the Raspberry Pi) 
 * Connect via SSH:
 
@@ -62,26 +63,27 @@ These are the basic shell commands:
 
 ### Julia
 
-
+Most of the code is written in julia, therefore we need to install julia.
 Go to https://julialang.org/downloads/, *copy* the download link for julia for *aarch64*. Download julia directly on the Rasbperry Pi:
 
 ```bash
 wget https://julialang-s3.julialang.org/bin/linux/aarch64/1.8/julia-1.8.5-linux-aarch64.tar.gz
 ```
 
-1.8.5 is the current stable version (as of March 2023). 
+1.8.5 is the current stable version (as of March 2023). This command will extract all files from the downloaded archive `julia-1.8.5-linux-aarch64.tar.gz` and install julia in `/opt/julia-1.8.5`:
 
 ```bash
 sudo tar -C /opt -xvf julia-1.8.5-linux-aarch64.tar.gz
 ```
 
-where `julia-1.8.5-linux-aarch64.tar.gz` is the downloaded file.
+where `julia-1.8.5-linux-aarch64.tar.gz` is the downloaded file. We put a symbolic link of the julia program in `/usr/local/bin` to point to the installation directory `/opt/julia-1.8.5/bin/`. 
 
 ```bash
 sudo ln -s /opt/julia-1.8.5/bin/julia /usr/local/bin
 ```
 
-where `julia-1.8.5` is the directory that was created when extracting the compressed archive.
+The OS now knows where to find the julia program.
+
 Start Julia by running `julia` and install the following packages:
 
 ```julia
@@ -93,6 +95,13 @@ Pkg.add("StringEncodings")
 Pkg.add("NMEA")
 ```
 
+| Package  | Description  |
+|---|---|
+| `LibSerialPort` | issue commands over the serial port (WaveShare Hat is connected over the serial port) |
+| `PiGPIO` | Control the GPIO pin from julia |
+| `URIs` | manipulate web links |
+| `StringEncodings` | handle different string encodings |
+| `NMEA` | Implement the [NMEA protocol](https://en.wikipedia.org/wiki/NMEA_0183) for reading the GNSS/GPS information |
 
 Create the folder `~/.julia/config/` and the file `~/.julia/config/startup.jl` with a text editor like nano, emacs or vim.
 
@@ -108,6 +117,8 @@ The file  `~/.julia/config/startup.jl` should have the following content:
 ```julia
 push!(LOAD_PATH, joinpath(ENV["HOME"],"drifter-raspberry-pi"))
 ```
+
+Now everytime julia starts, it knows where to the code in the folder `drifter-raspberry-pi`.
 
 Install other software: pigpiod is a daemon for controling the general purpose I/O pins (GPIO). We also set the timezone to UTC.
 
@@ -141,6 +152,7 @@ write("/sys/class/leds/led0/trigger","none")
 write("/sys/class/leds/led0/brightness","1")
 write("/sys/class/leds/led0/brightness","0")
 ```
+The first command, will take control over the green led. The second and third command switch it on and off.
 
 Blinking leds:
 
