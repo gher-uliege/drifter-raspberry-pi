@@ -359,6 +359,7 @@ The output of `diff` should match to the difference shown before.
 
 ## Disable BlueTooth
 
+Run these commands to disable BlueTooth:
 
 ```bash
 sudo systemctl disable hciuart.service
