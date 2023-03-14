@@ -172,7 +172,7 @@ Idea: What about implementing [Morse code](https://en.wikipedia.org/wiki/Morse_c
 ## GSM Modem
 
 
-![raspberry-pi-4-labelled](img/gsm-gprs-gnss-hat-1_6.svg)
+![raspberry-pi-4-labelled](img/gsm-gprs-gnss-hat-1_6.svg?)
 
 We will need the SIM card in its standard card size (25 mm by 15 mm).
 
