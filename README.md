@@ -276,9 +276,7 @@ Examples of GNSS include Europe’s Galileo, the USA’s NAVSTAR Global Position
 | AT+CGNSPWR=1 | power GNSS  on | |
 | AT+CGNSINF   | get time and coordinates (if available) | |
 
-
-
-http://aprs.gids.nl/nmea/
+More information about NMEA is available at http://aprs.gids.nl/nmea/.
 
 
 # Tests in Julia
