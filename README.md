@@ -171,6 +171,9 @@ Idea: What about implementing [Morse code](https://en.wikipedia.org/wiki/Morse_c
 
 ## GSM Modem
 
+
+![raspberry-pi-4-labelled](img/gsm-gprs-gnss-hat-1_6.svg)
+
 We will need the SIM card in its standard card size (25 mm by 15 mm).
 
 * Place the SIM card in the WaveShare HAT (gently, very gently)
@@ -201,19 +204,82 @@ First, start the Waveshare HAT (long push on power button PWRKEY)
 sudo minicom -D /dev/ttyS0
 ```
 
-- These commands should not return ERROR:
-AT
+- Try these commands, they should not return `ERROR` (where 1234 is your pin):
 
-AT+CPIN="XXXX"
+```
+AT
+# output OK
+AT+CPIN="1234"
 
 AT+CREG?
-
-- Command to call a phone number
-ATD0032XXXXXXXXX;
+```
 
 Some CREG info: https://web.archive.org/web/20230121160033/https://docs.eseye.com/Content/ELS61/ATCommands/ELS61CREG.htm
 
+- Command to call a phone number (do not forget the final semicolon and the telephone prefix)
+
+```
+ATD0032XXXXXXXXX;
+```
+
+### SMS
+
+
+| Command  | Description  | Return value |
+|---|---|---|
+| AT+CMGF=1  | Set the format of messages to Text mode  |   |
+| AT+CSCA="some number"  | set the SMS Service Center Address  |   |
+| AT+CMGS="phone_number" | send an SMS message to a GSM phone  (wait for the > prompt and terminate the message with [CTRL+Z](https://en.wikipedia.org/wiki/Substitute_character) |   |
+
+In Julia, SMS messages should be terminated by `"\x1a\r\n"` (CTRL+Z, carriage return, line feed).
+
+Optional, test to send a SMS via minicom:
+
+```
+AT
+# output OK
+AT+CPIN?
++CPIN: READY
+
+# output OK
+AT+CMGF=1
+# output OK
+AT+CSCA="0032475161616"
+# output OK
+AT+CMGS="0032111111111"
+> your message without special characters
+>
++CMGS: 9
+
+# output OK
+```
+
+where `0032475161616` is the local SMS Service Center number and `0032111111111` its the recipient CSM phone number.
+
+
+| cell phone operator      | local SMS service center  |
+|--------------|---|
+| Proximus, Belgium  | 0032475161616 |
+| Orange, Belgium  | 0032495002530 |
+
+
 To exit minicom, Ctrl+A x
+
+### Global Navigation Satellite System (GNSS)
+
+Examples of GNSS include Europe’s Galileo, the USA’s NAVSTAR Global Positioning System (GPS), Russia’s Global'naya Navigatsionnaya Sputnikovaya Sistema (GLONASS) and China’s BeiDou Navigation Satellite System.
+
+| Command      | Description  | Return value |
+|--------------|---|---|
+| AT+CGNSPWR?  | query if GNSS is powerd on | |
+| AT+CGNSIPR?  | query the GNSS baud rate | |
+| AT+CGNSPWR=1 | power GNSS  on | |
+| AT+CGNSINF   | get time and coordinates (if available) | |
+
+
+
+http://aprs.gids.nl/nmea/
+
 
 # Tests in Julia
 
@@ -237,51 +303,6 @@ if bytesavailable(sp) > 0; println(String(read(sp))); end
 ```
 
 
-### SMS
-
-| Command  | Description  | Return value |
-|---|---|---|
-| AT+CMGF=1  | Set the format of messages to Text mode  |   |
-| AT+CSCA="some number"  | set the SMS Service Center Address  |   |
-| AT+CMGS="phone_number" | send an SMS message to a GSM phone  (wait for the > prompt and terminate the message with [CTRL+Z](https://en.wikipedia.org/wiki/Substitute_character) |   |
-
-In Julia, SMS messages should be terminated by `"\x1a\r\n"` (CTRL+Z, carriage return, line feed).
-
-Optional, test to send a SMS via minicom:
-
-```
-AT+CPIN?
-+CPIN: READY
-
-OK
-AT+CMGF=1
-OK
-AT+CSCA="0032475161616"
-OK
-AT+CMGS="0032111111111"
-> your message without special characters
->
-+CMGS: 9
-
-OK
-```
-
-where `0032475161616` is the SMS Service Center Address and `0032111111111` its the recipient CSM phone number.
-
-### Global Navigation Satellite System (GNSS)
-
-Examples of GNSS include Europe’s Galileo, the USA’s NAVSTAR Global Positioning System (GPS), Russia’s Global'naya Navigatsionnaya Sputnikovaya Sistema (GLONASS) and China’s BeiDou Navigation Satellite System.
-
-| Command      | Description  | Return value |
-|--------------|---|---|
-| AT+CGNSPWR?  | query if GNSS is powerd on | |
-| AT+CGNSIPR?  | query the GNSS baud rate | |
-| AT+CGNSPWR=1 | power GNSS  on | |
-| AT+CGNSINF   | get time and coordinates (if available) | |
-
-
-
-http://aprs.gids.nl/nmea/
 
 # Configure `drifter-diy.jl`
 
@@ -296,10 +317,6 @@ cp drifter-diy.toml.template drifter-diy.toml
 
 You must adapt `phone_number` and `pin`. `local_SMS_service_center` should match the cell phone operator of the SIM card. 
 
-| cell phone operator      | local SMS service center  |
-|--------------|---|
-| Proximus, Belgium  | 0032475161616 |
-| Orange, Belgium  | 0032495002530 |
 
 All phone number should be written using only digits (no space or plus sign).
 
