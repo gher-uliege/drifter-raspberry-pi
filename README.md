@@ -283,6 +283,26 @@ Examples of GNSS include Europe’s Galileo, the USA’s NAVSTAR Global Position
 
 http://aprs.gids.nl/nmea/
 
+# Configure `drifter-diy.jl`
+
+The program `drifter-diy.jl` tracks the GPS position, save it in a text file and send the position via SMS. 
+It can be configured with the file `drifter-diy.toml` for which a template is available  [`drifter-diy.toml.template`](drifter-diy.toml.template).
+Copy the template:
+
+```bash
+cd drifter-raspberry-pi
+cp drifter-diy.toml.template drifter-diy.toml
+```
+
+You must adapt `phone_number` and `pin`. `local_SMS_service_center` should match the cell phone operator of the SIM card. 
+
+| cell phone operator      | local SMS service center  |
+|--------------|---|
+| Proximus, Belgium  | 0032475161616 |
+| Orange, Belgium  | 0032495002530 |
+
+All phone number should be written using only digits (no space or plus sign).
+
 # Reduce power consumption
 
 
@@ -393,6 +413,20 @@ diff --color -u /boot/cmdline.txt.bak /boot/cmdline.txt
 
 
 # Run at start-up
+
+
+Go to the folder `/home/pi/drifter-raspberry-pi`:
+
+```bash
+cd /home/pi/drifter-raspberry-pi
+```
+Have a look at the file `drifter-diy.service`:
+
+```bash
+cat drifter-diy.service
+```
+
+This file is a System D (really, that is the real name :-) unit file. It tells the OS, that the julia program `drifter-diy.jl` should be started on boot.
 
 ```bash
 sudo cp drifter-diy.service /etc/systemd/system/
