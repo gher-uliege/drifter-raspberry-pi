@@ -363,7 +363,7 @@
        transform="matrix(0.7162372,0,0,0.70391367,249.75825,236.84209)" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:16.3342px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.710048"
+       style="font-style:normal;font-weight:normal;font-size:16.3342px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#333333;fill-opacity:1;stroke:none;stroke-width:0.710048"
        x="-15.885175"
        y="791.62054"
        id="text61393"
@@ -372,6 +372,6 @@
          id="tspan61391"
          x="-15.885175"
          y="791.62054"
-         style="font-size:16.3342px;stroke-width:0.710048">Adapted from:  www.waveshare.com</tspan></text>
+         style="font-size:16.3342px;stroke-width:0.710048;fill:#333333">Adapted from:  www.waveshare.com</tspan></text>
   </g>
 </svg>
