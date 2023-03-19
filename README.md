@@ -176,11 +176,15 @@ Idea: What about implementing [Morse code](https://en.wikipedia.org/wiki/Morse_c
 
 We will need the SIM card in its standard card size (25 mm by 15 mm).
 
-* Place the SIM card in the WaveShare HAT (gently, very gently)
+* Place the SIM card in the WaveShare HAT (gently, very gently). SIM cards 03, 04 and 05 need to be activated (see below)
 * Connect the GNSS (GPS) and GSM atennas to the Modem
 * Connect the WaveShare HAT with the Rasbperry Pi and fix with screws
 * Power on the Rasbperry Pi
 * Power on the WaveShare HAT
+
+SIM card activation: by using the procedure "SMS" below, send an SMS to 8804 with:
+1. The word IDENT
+2. Twice the phone number of the SIM card, separated by space
 
 The Modem uses a series of so-called [AT commands](https://en.wikipedia.org/wiki/Hayes_command_set).
 All commands start with `AT` (meaning 'attention').
