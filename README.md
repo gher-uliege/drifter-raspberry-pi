@@ -392,7 +392,7 @@ diff --color -u /boot/config.txt.bak /boot/config.txt
 +arm_boost=0
  
  [all]
- enable_uart=1
++enable_uart=1
 +
 +# https://www.foxplex.com/sites/raspberry-pi-over-und-underclocking/
 +arm_freq=700
