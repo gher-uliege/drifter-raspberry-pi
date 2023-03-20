@@ -412,7 +412,10 @@ cat /proc/cpuinfo
 ```
 
 To reduce the power consumption, limit the CPU cores to 1.
-Add `maxcpus=1` to the file `/boot/cmdline.txt` before `root`, keep the rest of the line. Do __not__ change the identifier following `root=PARTUUID=` or anything else.
+* Add `maxcpus=1` to the file `/boot/cmdline.txt` before `root`.
+* If the file contains `console=serial0,115200`, then you should remove it.
+
+Do __not__ change the identifier following `root=PARTUUID=` or anything else.
 
 As before, make a back-up copy, edit the file and finaly review the changes with:
 
