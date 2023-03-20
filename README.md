@@ -44,7 +44,7 @@ rpi-imager
 ssh pi@192.168.1.6
 ```
 
-where `192.168.1.6` should be the IP adress from the routers admin page. This IP address will be different for every Raspberry Pi.
+where `192.168.1.6` should be the IP adress from the routers admin page. This IP address will be different for every Raspberry Pi. When you connect the first time, you need to confirm the connection by typing "yes".
 
 ## First step
 
@@ -412,7 +412,17 @@ cat /proc/cpuinfo
 ```
 
 To reduce the power consumption, limit the CPU cores to 1.
-Add `maxcpus=1` to the file `/boot/cmdline.txt`, keep the rest of the line. Do __not__ change the identifier following `root=PARTUUID=`.
+Add `maxcpus=1` to the file `/boot/cmdline.txt` before `root`, keep the rest of the line. Do __not__ change the identifier following `root=PARTUUID=` or anything else.
+
+As before, make a back-up copy, edit the file and finaly review the changes with:
+
+```
+sudo cp /boot/cmdline.txt /boot/cmdline.txt.bak
+sudo nano /boot/cmdline.txt
+diff --color -u /boot/cmdline.txt.bak /boot/cmdline.txt
+```
+
+For example, my changes looked like this.
 
 ```diff
 --- /boot/cmdline.txt.bak	2023-01-22 21:01:02.000000000 +0000
@@ -423,12 +433,12 @@ Add `maxcpus=1` to the file `/boot/cmdline.txt`, keep the rest of the line. Do _
 +console=tty1 maxcpus=1 root=PARTUUID=a999dc5f-02 rootfstype=ext4 fsck.repair=yes rootwait
 ```
 
-As before, make a back-up copy, edit the file and finaly review the changes with:
+# Reboot
 
-```
-sudo cp /boot/cmdline.txt /boot/cmdline.txt.bak
-sudo nano /boot/cmdline.txt
-diff --color -u /boot/cmdline.txt.bak /boot/cmdline.txt
+To reboot the Rasberry pi use the following command (you will need to reconnect via SSH, after the reboot process is finished):
+
+```bash
+sudo reboot
 ```
 
 
