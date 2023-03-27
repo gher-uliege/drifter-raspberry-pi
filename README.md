@@ -317,6 +317,12 @@ cd drifter-raspberry-pi
 cp drifter-diy.toml.template drifter-diy.toml
 ```
 
+Edit the file:
+
+```bash
+nano drifter-diy.toml
+```
+
 You must adapt `phone_number` and `pin`. `local_SMS_service_center` should match the cell phone operator of the SIM card. 
 
 
