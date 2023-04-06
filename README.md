@@ -4,11 +4,11 @@
 Table of contents:
 
 
-* [01-software-installation.md](01-software-installation.md)
-* [02-reduce-power-consumption.md](02-reduce-power-consumption.md)
-* [03-blinking-leds.md](03-blinking-leds.md)
-* [04-GSM-modem.md](04-GSM-modem.md)
-* [05-configure-drifter-diy.md](05-configure-drifter-diy.md)
+1. [software installation](01-software-installation.md)
+1. [reduce power consumption](02-reduce-power-consumption.md)
+1. [blinking leds](03-blinking-leds.md)
+1. [GSM modem](04-GSM-modem.md)
+1. [configure drifter diy](05-configure-drifter-diy.md)
 
 
 # Switch on/off
