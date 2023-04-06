@@ -1,7 +1,7 @@
 
 
 
-Table of contents:
+# Table of contents:
 
 
 1. [💾 software installation](01-software-installation.md)
@@ -11,7 +11,7 @@ Table of contents:
 1. [⚙️ configure `drifter-diy.jl`](05-configure-drifter-diy.md)
 
 
-# Switch on/off
+## Switch on/off
 
 * Connection via ssh
 
@@ -21,7 +21,7 @@ sudo shutdown -h now
 
 Wait that green led is off, then disconnect power supply.
 
-# Start-up sequence
+## Start-up sequence
 
 Approximate timings:
 
