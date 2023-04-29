@@ -50,3 +50,9 @@ See the log output:
 ```
 journalctl -u drifter-diy.service -f
 ```
+Restart the service 
+
+```bash
+sudo systemctl restart drifter-diy.service
+```
+
