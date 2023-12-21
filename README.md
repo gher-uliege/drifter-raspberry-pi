@@ -9,6 +9,7 @@
 1. [🚨 blinking leds](03-blinking-leds.md)
 1. [☎️ GSM modem](04-GSM-modem.md)
 1. [⚙️ configure `drifter-diy.jl`](05-configure-drifter-diy.md)
+1. [🌊 notes for deployment](06-deployment.md)
 
 
 ## Switch on/off
