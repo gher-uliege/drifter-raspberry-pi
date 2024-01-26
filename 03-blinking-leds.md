@@ -10,16 +10,16 @@ sudo julia
 Enter the following Julia commands:
 
 ```julia
-write("/sys/class/leds/led0/trigger","none")
-write("/sys/class/leds/led0/brightness","1")
-write("/sys/class/leds/led0/brightness","0")
+write("/sys/class/leds/ACT/trigger","none")
+write("/sys/class/leds/ACT/brightness","1")
+write("/sys/class/leds/ACT/brightness","0")
 ```
 The first command, will take control over the green led. The second and third command switch it on and off.
 
 Blinking leds:
 
 ```julia
-filename = "/sys/class/leds/led0/brightness";
+filename = "/sys/class/leds/ACT/brightness";
 
 while true;
    write(filename,"0");
