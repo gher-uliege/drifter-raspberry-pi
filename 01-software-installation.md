@@ -15,7 +15,7 @@ sudo dpkg -i imager_1.7.2_amd64.deb
 rpi-imager
 ```
 
-* Install **Rapberry Pi OS Lite (64-bit)** onto the SD card.
+* Install **Raspberry Pi OS Lite (64-bit)** onto the SD card (available under **Raspberry Pi OS (other)**).
      * It is important (for julia) to select the 64-bit version.
      * The "Lite" version means that a desktop environement (which we do not need) is not pre-installed.
 * In the advanced settings (Use `CTRL + SHIFT + X`), see https://github.com/gher-uliege/drifter-raspberry-pi/tree/main/img for screenshots.
