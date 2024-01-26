@@ -70,7 +70,7 @@ Go to https://julialang.org/downloads/, *copy* the download link for julia for *
 wget https://julialang-s3.julialang.org/bin/linux/aarch64/1.10/julia-1.10.0-linux-aarch64.tar.gz
 ```
 
-1.10.0 is the current stable version (as of March 2023). This command will extract all files from the downloaded archive `julia-1.10.0-linux-aarch64.tar.gz` and install julia in `/opt/julia-1.10.0`:
+1.10.0 is the current stable version (as of January 2024). This command will extract all files from the downloaded archive `julia-1.10.0-linux-aarch64.tar.gz` and install julia in `/opt/julia-1.10.0`:
 
 ```bash
 sudo tar -C /opt -xvf julia-1.10.0-linux-aarch64.tar.gz
