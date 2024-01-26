@@ -88,11 +88,7 @@ Start Julia by running `julia` and install the following packages:
 
 ```julia
 using Pkg
-Pkg.add("LibSerialPort")
-Pkg.add("PiGPIO")
-Pkg.add("URIs")
-Pkg.add("StringEncodings")
-Pkg.add("NMEA")
+Pkg.add(["LibSerialPort","PiGPIO","URIs","StringEncodings","NMEA"])
 ```
 
 | Package  | Description  |
