@@ -67,19 +67,19 @@ Most of the code is written in julia, therefore we need to install julia.
 Go to https://julialang.org/downloads/, *copy* the download link for julia for *aarch64*. Download julia directly on the Rasbperry Pi:
 
 ```bash
-wget https://julialang-s3.julialang.org/bin/linux/aarch64/1.8/julia-1.8.5-linux-aarch64.tar.gz
+wget https://julialang-s3.julialang.org/bin/linux/aarch64/1.10/julia-1.10.0-linux-aarch64.tar.gz
 ```
 
-1.8.5 is the current stable version (as of March 2023). This command will extract all files from the downloaded archive `julia-1.8.5-linux-aarch64.tar.gz` and install julia in `/opt/julia-1.8.5`:
+1.10.0 is the current stable version (as of March 2023). This command will extract all files from the downloaded archive `julia-1.10.0-linux-aarch64.tar.gz` and install julia in `/opt/julia-1.10.0`:
 
 ```bash
-sudo tar -C /opt -xvf julia-1.8.5-linux-aarch64.tar.gz
+sudo tar -C /opt -xvf julia-1.10.0-linux-aarch64.tar.gz
 ```
 
-where `julia-1.8.5-linux-aarch64.tar.gz` is the downloaded file. We put a symbolic link of the julia program in `/usr/local/bin` to point to the installation directory `/opt/julia-1.8.5/bin/`. 
+where `julia-1.10.0-linux-aarch64.tar.gz` is the downloaded file. We put a symbolic link of the julia program in `/usr/local/bin` to point to the installation directory `/opt/julia-1.10.0/bin/`. 
 
 ```bash
-sudo ln -s /opt/julia-1.8.5/bin/julia /usr/local/bin
+sudo ln -s /opt/julia-1.10.0/bin/julia /usr/local/bin
 ```
 
 The OS now knows where to find the julia program.
