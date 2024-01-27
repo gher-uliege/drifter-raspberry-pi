@@ -22,22 +22,22 @@ rpi-imager
      * hostname in the form of `drifterXY` (for example dirfter02, but everybody should use a different number, replace XY with your 2-digit group number).
      * one enable SSH (use password authentication)
      * set username: `pi` (keep default)
-     * set password: (will be provided) 
+     * set password: (will be provided)
      * SSID: __TP-Link_1465__
      * WiFi password:  (will be provided, __different from your account password__)
      * Time zone: Europe/Brussels
-     * Make sure that Enable Telemetry is __unchecked__. 
+     * Make sure that Enable Telemetry is __unchecked__.
 * Put the SD card in the SD card slot of the Rapberry Pi
 * Power-on the Raspberry Pi (via the USB C connector)
 
 ## Connect to the Raspberry Pi
 
-* Determine the Raspberry pi IP address (see WiFi router access logs) 
+* Determine the Raspberry pi IP address (see WiFi router access logs)
 * Open a terminal:
      * [Ubuntu/Linux](https://ubuntu.com/tutorials/command-line-for-beginners#3-opening-a-terminal)
      * [Mac OS](https://support.apple.com/guide/terminal/open-or-quit-terminal-apd5265185d-f365-44cb-8b09-71a064a42125/mac)
-     * [Windows](https://learn.microsoft.com/en-us/powershell/scripting/windows-powershell/starting-windows-powershell?view=powershell-7.3#from-the-start-menu) and  see also [Get started with OpenSSH for Windows](https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse?tabs=gui)      
-* __Connect your laptop to the same WiFi network as the Raspbery Pi__ (this is important, otherwise you cannot connect to the Raspberry Pi) 
+     * [Windows](https://learn.microsoft.com/en-us/powershell/scripting/windows-powershell/starting-windows-powershell?view=powershell-7.3#from-the-start-menu) and  see also [Get started with OpenSSH for Windows](https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse?tabs=gui)
+* __Connect your laptop to the same WiFi network as the Raspbery Pi__ (this is important, otherwise you cannot connect to the Raspberry Pi)
 * Connect via SSH:
 
 ```bash
@@ -76,7 +76,7 @@ wget https://julialang-s3.julialang.org/bin/linux/aarch64/1.10/julia-1.10.0-linu
 sudo tar -C /opt -xvf julia-1.10.0-linux-aarch64.tar.gz
 ```
 
-where `julia-1.10.0-linux-aarch64.tar.gz` is the downloaded file. We put a symbolic link of the julia program in `/usr/local/bin` to point to the installation directory `/opt/julia-1.10.0/bin/`. 
+where `julia-1.10.0-linux-aarch64.tar.gz` is the downloaded file. We put a symbolic link of the julia program in `/usr/local/bin` to point to the installation directory `/opt/julia-1.10.0/bin/`.
 
 ```bash
 sudo ln -s /opt/julia-1.10.0/bin/julia /usr/local/bin
@@ -131,3 +131,26 @@ Get the source code:
 ```bash
 git clone https://github.com/gher-uliege/drifter-raspberry-pi.git
 ```
+
+
+## Enable serial port
+
+We will connect to the GSM model via the serial port. The serial port has to be enabled using the
+shell command `raspi-config`:
+
+```bash
+sudo raspi-config
+```
+
+* Select `3 Interface Options`
+* Select  `I5 Serial Port`
+* Answer *no* to the question `Would you like a login shell to be accessible over serial?`
+* Answer *yes* to the question `Would you like the serial port hardware to be enabled?`
+* Check that the output is:
+
+```
+The serial login shell is disabled
+The serial interface is enabled
+```
+
+Exit the configuration tool and confirm that you want to reboot if asked.
