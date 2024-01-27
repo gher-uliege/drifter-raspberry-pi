@@ -16,7 +16,7 @@ Edit the file:
 nano drifter-diy.toml
 ```
 
-You must adapt `phone_number` and `pin`. `local_SMS_service_center` should match the cell phone operator of the SIM card. 
+You must adapt `phone_number` (receiver of the SMS messages) and `pin`. `local_SMS_service_center` should match the cell phone operator of the SIM card (see [04-GSM-modem.md](04-GSM-modem.md)). 
 
 
 All phone number should be written using only digits (no space or plus sign).
