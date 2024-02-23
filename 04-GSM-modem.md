@@ -14,7 +14,7 @@ We will need the SIM card in its standard card size (25 mm by 15 mm).
 
 SIM card activation: by using the procedure "SMS" below, send an SMS to 8804 with:
 1. The word IDENT
-2. Twice the phone number of the SIM card, separated by space
+2. Twice the phone number of the SIM card, separated by space. For example `IDENT 0470123456 0470123456`.
 
 The Modem uses a series of so-called [AT commands](https://en.wikipedia.org/wiki/Hayes_command_set).
 All commands start with `AT` (meaning 'attention').
