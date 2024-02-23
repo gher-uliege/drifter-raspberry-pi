@@ -23,7 +23,7 @@ rpi-imager
      * one enable SSH (use password authentication)
      * set username: `pi` (keep default)
      * set password: (will be provided)
-     * SSID: __TP-Link_1465__
+     * SSID: __GL-MT300N-V2-c2d__ (or __TP-Link_1465__)
      * WiFi password:  (will be provided, __different from your account password__)
      * Time zone: Europe/Brussels
      * Make sure that Enable Telemetry is __unchecked__.
