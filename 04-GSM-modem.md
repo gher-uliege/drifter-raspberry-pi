@@ -5,6 +5,7 @@
 
 We will need the SIM card in its standard card size (25 mm by 15 mm).
 
+* Please take note of the PIN and PUK number of the SIM card (you might need them in Calvi)
 * Place the SIM card in the WaveShare HAT (gently, very gently). SIM cards 03, 04 and 05 need to be activated (see below)
 * Connect the GNSS (GPS) and GSM atennas to the Modem
 * Connect the WaveShare HAT with the Rasbperry Pi and fix with screws
