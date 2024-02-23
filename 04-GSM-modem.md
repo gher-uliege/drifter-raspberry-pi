@@ -88,7 +88,7 @@ AT+CMGS="0032111111111"
 # output OK
 ```
 
-where `0032475161616` is the local SMS Service Center number and `0032111111111` its the recipient CSM phone number.
+where `0032475161616` is the local SMS Service Center number and `0032111111111` its the recipient GSM phone number.
 
 
 | cell phone operator      | local SMS service center  |
@@ -97,7 +97,7 @@ where `0032475161616` is the local SMS Service Center number and `0032111111111`
 | Orange, Belgium  | 0032495002530 |
 
 
-To exit minicom, Ctrl+A x
+To exit minicom, type `Ctrl+A x`.
 
 ### Global Navigation Satellite System (GNSS)
 
