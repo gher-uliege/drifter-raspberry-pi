@@ -14,7 +14,7 @@ $ journalctl --file user-1000.journal --utc
  # Decoding SMS messages
 
 ```julia
-using GSMHat
+using GSMHat, TOML
 confname ="drifter-diy.toml"
 config = open(confname) do f
                TOML.parse(f)
