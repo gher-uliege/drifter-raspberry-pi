@@ -11,7 +11,7 @@ $ journalctl --file user-1000.journal --utc
 
 
 
- # Decoding SMS messages
+ ## Decoding SMS messages
 
 ```julia
 using GSMHat, TOML
@@ -29,3 +29,8 @@ decodemsg(messages[1].sms_message_body)
 # "Cher client Proximus, votre carte prépayée numéro...
 ```
 
+## SSH connection without keys
+
+```bash
+ssh -o PubkeyAuthentication=no -o PreferredAuthentications=password  -A pi@192.168.0.199
+```
