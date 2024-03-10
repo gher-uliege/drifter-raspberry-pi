@@ -24,7 +24,7 @@ rpi-imager
      * set username: `pi` (keep default)
      * set password: (will be provided)
      * SSID: __GL-MT300N-V2-c2d__
-     * WiFi password:  (will be provided, __different from your account password__)
+     * WiFi password:  (will be provided, it is __different from your account password__)
      * Time zone: Europe/Brussels
      * Make sure that Enable Telemetry is __unchecked__.
 * Put the SD card in the SD card slot of the Rapberry Pi
