@@ -14,6 +14,8 @@ write("/sys/class/leds/ACT/trigger","none")
 write("/sys/class/leds/ACT/brightness","1")
 write("/sys/class/leds/ACT/brightness","0")
 ```
+
+Replace `ACT` by `led0` for older version of Raspbery PI (drifter01 to drifter05).
 The first command, will take control over the green led. The second and third command switch it on and off.
 
 Blinking leds:
