@@ -19,8 +19,8 @@ rpi-imager
      * It is important (for julia) to select the **64-bit version**.
      * The "Lite" version means that a desktop environement (which we do not need) is not pre-installed.
 * In the advanced settings (Use `CTRL + SHIFT + X`), see https://github.com/gher-uliege/drifter-raspberry-pi/tree/main/img for screenshots.
-     * hostname in the form of `drifterXY` (for example dirfter02, but everybody should use a different number, replace XY with your 2-digit group number).
-     * one enable SSH (use password authentication)
+     * hostname in the form of __`drifterXY`__ (for example dirfter02, but everybody should use a different number, replace XY with your 2-digit group number).
+     * __enable SSH__ (use password authentication)
      * set username: `pi` (keep default)
      * set password: (will be provided)
      * SSID: __GL-MT300N-V2-c2d__
