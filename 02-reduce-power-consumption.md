@@ -91,7 +91,7 @@ To reduce the power consumption, limit the CPU cores to 1.
 * Add `maxcpus=1` to the file `/boot/cmdline.txt` before `root`.
 * If the file contains `console=serial0,115200`, then you should remove it.
 
-Do __not__ change the identifier following `root=PARTUUID=` or anything else.
+__Do not change the identifier following `root=PARTUUID=` or anything else.__
 
 As before, make a back-up copy, edit the file and finaly review the changes with:
 
@@ -101,7 +101,7 @@ sudo nano /boot/cmdline.txt
 diff --color -u /boot/cmdline.txt.bak /boot/cmdline.txt
 ```
 
-For example, my changes looked like this.
+For example, __my__ changes looked like this.
 
 ```diff
 --- /boot/cmdline.txt.bak	2023-01-22 21:01:02.000000000 +0000
