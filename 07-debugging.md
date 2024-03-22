@@ -10,13 +10,13 @@ sudo systemctl start pigpiod
 ```
 
 
-* Is the Raspberry Pi configuired in UTC? Run the shell command `timedatectl` to check. If not, run the shell commands:
+* Is the Raspberry Pi configured in UTC? Run the shell command `timedatectl` to check. If not, run the shell commands:
 
 ```
 sudo timedatectl set-timezone UTC
 ```
 
-* Do you get the message `drifterXY ready, switching GNSS on` ? If not, check with the shell commands:
+* Do you get the SMS message `drifterXY ready, switching GNSS on` ? If not, check with the shell commands:
 
 ```
 journalctl -u drifter-diy.service
