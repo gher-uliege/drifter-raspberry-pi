@@ -10,7 +10,7 @@
 1. [☎️ GSM modem](04-GSM-modem.md)
 1. [⚙️ configure `drifter-diy.jl`](05-configure-drifter-diy.md)
 1. [🌊 notes for deployment](06-deployment.md)
-1. [Analysis of drifter data](https://tinyurl.com/drifter-julia)
+1. [💻 Analysis of drifter data](https://tinyurl.com/drifter-julia)
 
 ## Switch on/off
 
