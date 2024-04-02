@@ -10,3 +10,12 @@
 The date in the file name can be incorrect because the raspberry pi has to jet syncronized its clock during boot. Use the dates and times saved in the `track-drifter....txt`file.
 
 Times are saved in UTC.
+
+
+Transfer files using the following to be entered on your laptop:
+
+```
+scp pi@192.168.1.106:/home/pi/file_name.txt  .
+```
+
+where `192.168.1.106` is the IP address of your Raspberry Pi and `file_name.txt` the file that you want to transfer.
