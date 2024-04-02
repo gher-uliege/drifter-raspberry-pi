@@ -38,6 +38,16 @@ $ journalctl --file user-1000.journal --utc
 
 
 
+## Entering PUK
+
+```
+AT+CPIN="PUK","new_PIN"
+```
+
+For example `AT+CPIN="12341234","1234"` where the new pin can be the same as the old pin.
+
+
+
  ## Decoding SMS messages
 
 ```julia
