@@ -27,6 +27,7 @@ rpi-imager
      * WiFi password:  (will be provided, it is __different from your account password__)
      * Time zone: Europe/Brussels
      * Make sure that Enable Telemetry is __unchecked__.
+* Confirm with "Next", confirm that you want to apply costumized setting, double check that you write to the SD storage
 * Put the SD card in the SD card slot of the Rapberry Pi
 * Power-on the Raspberry Pi (via the USB C connector)
 
