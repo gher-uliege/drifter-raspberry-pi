@@ -1,5 +1,7 @@
 using Dates
 using Printf
+using PiGPIO
+using PiGPIO: OUTPUT, INPUT, LOW, HIGH, set_mode
 
 
 struct Tee{TIO <: Tuple} <: IO
@@ -36,6 +38,8 @@ ENABLE_A = 25 # GPIO 25 yellow
 
 pi=Pi() # connect to pigpiod daemon on localhost
 
+const STOP_PIN = 16
+
 m = Motor(pi,input1 = INPUT1, input2 = INPUT2, enable_A = ENABLE_A)
 
 #=
@@ -58,7 +62,21 @@ fname = expanduser("~/temperature-$hostname-$(Dates.format(Dates.now(),"yyyymmdd
 f = open(fname,"a")
 io = Tee(f,stdout)
 
-function record_temp(io,duration)
+function check_stop(pi)
+    for i = 1:3
+        stop = PiGPIO.read(pi,STOP_PIN) == 1
+        if !stop
+            return false
+        end
+        sleep(0.001)
+    end
+
+    return true
+end
+
+
+
+function record_temp(pi,io,duration)
     pos = 0
     for j = 1:duration
         pos += 1
@@ -71,23 +89,54 @@ function record_temp(io,duration)
             printstyled(io,@sprintf("%5.3f",T),color=:blue)
         end
         println(io)
-        sleep(1)
+
+        stop = check_stop(pi)
+
+        for ii = 1:10
+            stop = check_stop(pi)
+            if stop
+                println("stop")
+                break
+            end
+            sleep(0.1)
+        end
+
+        if stop
+            break
+        end
     end
 end
 
-for i = 1:3
+set_mode(pi, STOP_PIN, PiGPIO.INPUT)
+set_pull_up_down(pi, STOP_PIN, PiGPIO.PUD_UP)
+
+for i = 1:10
     start(m, forward = true)
-    record_temp(io,duration)
+    record_temp(pi,io,duration)
     stop(m)
 
     stop(m)
     start(m, forward = false)
-    record_temp(io,duration)
+    record_temp(pi,io,duration)
+
+    flush(f)
 end
 stop(m)
 
 
 #=
+
+while true
+    #set_pull_up_down(pi, STOP_PIN, PiGPIO.PUD_DOWN)
+    @show PiGPIO.read(pi,STOP_PIN)
+    sleep(0.1)
+end
+=#
+
+#=
+
+
+set_pull_up_down(pi, 23, pigpio.PUD_UP)
 
 set_mode(pi, INPUT1, OUTPUT)
 set_mode(pi, INPUT2, OUTPUT)
