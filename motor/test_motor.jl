@@ -28,17 +28,17 @@ include("../temperature_sensor.jl")
 
 w1ids = w1_ids()
 
-#/sys/bus/w1/devices/28-7fa1d445e65b/w1_slave
 
-# GPIO number
+# GPIO number for motor L298N
 
-INPUT1 = 23 # GPIO 23  blue
-INPUT2 = 24  #  GPIO 24 green
-ENABLE_A = 25 # GPIO 25 yellow
+const INPUT1 = 23 # GPIO 23  blue
+const INPUT2 = 24  #  GPIO 24 green
+const ENABLE_A = 25 # GPIO 25 yellow
+
+const STOP_PIN = 16 # GPIO 16 pin 36
 
 pi=Pi() # connect to pigpiod daemon on localhost
 
-const STOP_PIN = 16
 
 m = Motor(pi,input1 = INPUT1, input2 = INPUT2, enable_A = ENABLE_A)
 
@@ -50,14 +50,12 @@ start(m, forward = false)
 
 =#
 
-duration = 90
-duration = 50
 stop(m)
-pos = 0
 
 hostname = gethostname()
 
-fname = expanduser("~/temperature-$hostname-$(Dates.format(Dates.now(),"yyyymmddTHHMMSS")).txt")
+timestr = Dates.format(Dates.now(),"yyyymmddTHHMMSS")
+fname = expanduser("~/temperature-$hostname-$timestr.txt")
 
 f = open(fname,"a")
 io = Tee(f,stdout)
@@ -76,9 +74,11 @@ end
 
 
 
-function record_temp(pi,io,duration)
+function record_temp(pi,io)
     pos = 0
-    for j = 1:duration
+    stop = false
+
+    while !stop
         pos += 1
 
         temperature = temp.(w1ids)
@@ -100,29 +100,25 @@ function record_temp(pi,io,duration)
             end
             sleep(0.1)
         end
-
-        if stop
-            break
-        end
     end
 end
 
 set_mode(pi, STOP_PIN, PiGPIO.INPUT)
 set_pull_up_down(pi, STOP_PIN, PiGPIO.PUD_UP)
 
-for i = 1:10
+for i = 1:100
     start(m, forward = true)
-    record_temp(pi,io,duration)
+    record_temp(pi,io)
     stop(m)
 
     stop(m)
     start(m, forward = false)
-    record_temp(pi,io,duration)
+    record_temp(pi,io)
 
     flush(f)
 end
 stop(m)
-
+close(f)
 
 #=
 
@@ -151,4 +147,13 @@ PiGPIO.write(pi, INPUT2, PiGPIO.LOW)
 
 PiGPIO.write(pi, INPUT1, PiGPIO.LOW)
 PiGPIO.write(pi, INPUT2, PiGPIO.HIGH)
+=#
+
+
+#=
+
+while true
+@show PiGPIO.read(pi,STOP_PIN)
+end
+
 =#
