@@ -23,6 +23,9 @@ pin = config["pin"]
 APN = config["access_point_network"]
 portname = config["portname"]
 baudrate = config["baudrate"]
+map_lat = 42.5773
+map_lon = 8.7619
+map_zoom = 14
 
 @info "wait 60s"
 sleep(60)
@@ -100,7 +103,7 @@ open(fname,"a+") do f
         # log position if available
         if !isnothing(time) && !isnothing(latitude) && !isnothing(longitude)
             if now - last_message >  dt_message
-                message = "sigo vivo, estoy en $longitude, $latitude, $time"
+                message = "position at $time: https://www.openstreetmap.org/?mlon=$longitude&mlat=$latitude#map=$map_zoom/$map_lat/$map_lon"
                 @info "about to send" message
                 push!(outbox_messages,message)
                 last_message = now
