@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<base target="_top">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>Drifter map</title>
+	
+	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+	<style>
+		html, body {
+			height: 100%;
+			margin: 0;
+		}
+		.leaflet-container {
+			height: 800px;
+			width: 1200px;
+			max-width: 100%;
+			max-height: 100%;
+		}
+	</style>
+</head>
+<body>
+
+<div id='map'></div>
+
+<script>
+  var drifter_track = {
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+[ 8.724181, 42.580031],
+[ 8.724243, 42.580413],
+[ 8.724609, 42.580043],
+[ 8.753134, 42.573748],
+[ 8.752151, 42.573883],
+[ 8.752091, 42.573802],
+[ 8.752156, 42.573628],
+[ 8.752217, 42.573257],
+[ 8.752233, 42.573097],
+[ 8.752074, 42.572559],
+[ 8.752143, 42.572832],
+  [ 8.752108, 42.572379],
+  [ 8.752275, 42.572036],
+  [ 8.752634, 42.571661],
+[ 8.752808, 42.571438],
+[ 8.752991, 42.571201],
+[ 8.753135, 42.570946],
+[ 8.753138, 42.57067],
+[ 8.753056, 42.570508],
+[ 8.752966, 42.570424]
+]
+            },
+            "properties": {
+                "popupContent": "drifter03",
+            },
+            "id": 1
+        }
+    ]
+  };
+
+  
+  const map = L.map('map').setView([42.573, 8.74], 15);
+
+  const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+     maxZoom: 19,
+     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+  const drifter_trackLayer = L.geoJSON(drifter_track).addTo(map);
+</script>
+
+
+
+</body>
+</html>
