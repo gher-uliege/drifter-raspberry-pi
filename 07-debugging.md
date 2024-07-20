@@ -27,6 +27,15 @@ journalctl -u drifter-diy.service
 
 ## Debugging
 
+### Raspberry Pi does not connect to WiFi
+
+* Context Raspberry PI with an ethernet cable to router
+* Get the IP address from the router and SSH into the Raspberry Pi 
+* Run `sudo nmtui` and select `Activate a connection`, select WiFi and enter password
+* More information is available at https://pimylifeup.com/setting-up-raspberry-pi-wifi/
+
+### Other issues
+
 The SD cart can be mounted in a Linux system and the log files can be inspected.
 
 Log files are available under, e.g.:
