@@ -1,7 +1,7 @@
 
 <img src="https://github.com/user-attachments/assets/22ea3f79-fd94-4903-8872-f0c43a4a01b1" width="400">
 
-
+Ths repo containts the software to implement a data-logger in Julia for an ocean surface drifter which also communicates the data over the cell phone network.
 
 # Table of contents:
 
