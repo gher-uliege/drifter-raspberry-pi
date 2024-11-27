@@ -199,7 +199,10 @@ function unlook(sp,pin)
     if !occursin("READY",out)
         @info "unlock SIM"
         write(sp, "AT+CPIN=\"$pin\"\r\n")
-        waitfor(sp,"SMS Ready")
+        waitfor(sp,[
+            "SMS Ready", #
+            "SMS DONE", # A7680E
+        ])
     else
         @info "SIM already unlocked"
     end
@@ -251,13 +254,21 @@ function init(portname, baudrate; pin=nothing, local_SMS_service_center = nothin
         unlook(sp,pin)
     end
 
-    @info "selects the character set $(GSMHat.ENCODING)"
-    cmd(sp,"AT+CSCS=\"$(GSMHat.ENCODING)\"")
+
+    out = cmd(sp,"AT+CSCS=?")
+    if occursin(GSMHat.ENCODING,join(out,""))
+        @info "selects the character set $(GSMHat.ENCODING)"
+        cmd(sp,"AT+CSCS=\"$(GSMHat.ENCODING)\"")
+    else
+        @warn "Encoding $(GSMHat.ENCODING) is not supported" out
+    end
 
     if local_SMS_service_center != nothing
        @debug "set local SMS service center"
-       cmd(sp, "AT+CSCA=\"$local_SMS_service_center\"")
+       #cmd(sp, "AT+CSCA=\"$local_SMS_service_center\"")
     end
+    #cmd(sp,"AT+CSCA=?")
+    #cmd(sp,"AT+CSCA?")
 
     return sp
 end
