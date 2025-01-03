@@ -121,7 +121,7 @@ Install other software: pigpiod is a daemon for controling the general purpose I
 
 ```bash
 sudo apt-get update
-sudo apt-get install minicom p7zip-full git emacs-nox pigpiod
+sudo apt-get install --yes minicom p7zip-full git emacs-nox pigpiod
 sudo timedatectl set-timezone UTC
 sudo systemctl enable pigpiod
 sudo systemctl start pigpiod
