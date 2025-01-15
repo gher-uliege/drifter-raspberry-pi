@@ -8,7 +8,7 @@ Raspberry Pi hardware (source: https://www.raspberrypi.com/)
 
 * You need a compute with a SD card reader
 * Installing [raspberry pi Imager](https://www.raspberrypi.com/software/) and follow the instructions on this page.
-* For Ubuntu, install the deb file with:
+* For windows launch the downloaded installer. For Ubuntu, install the deb file with:
 
 ```bash
 sudo dpkg -i imager_1.7.2_amd64.deb
@@ -47,6 +47,8 @@ ssh pi@192.168.1.6
 
 where `192.168.1.6` should be the IP adress from the routers admin page. This IP address will be different for every Raspberry Pi. When you connect the first time, you need to confirm the connection by typing "yes".
 
+Note that everybody can connect to the Raspberry PI using the username (`pi`) and password aslong as your are on the same network.
+
 ## First step
 
 
@@ -60,6 +62,8 @@ These are the basic shell commands:
 | `cat /proc/cpuinfo` | see the content of a text file |
 | `wget some_url` | download a file from URL |
 | `top`  | see which process is running |
+| `nano`  | a simple text editor for the terminal |
+| `apt-get` | install packages (i.e. programs) |
 
 
 ### Julia
