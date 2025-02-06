@@ -7,7 +7,7 @@
 * wooden beam
 * wooden board
 * fabric (for sails)
-* 4 M8 threaded bars 
+* 4 M8 threaded bars (1 m length)
 * 24 M8 screws
 * 24 M8 washers
 
