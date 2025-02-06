@@ -3,8 +3,7 @@
 
 Ths repo containts the software to implement a data-logger in Julia for an ocean surface drifter which also communicates the data over the cell phone network.
 
-List of materials needed:
-https://github.com/gher-uliege/drifter-raspberry-pi/blob/main/material.md
+List of materials needed: [🔧 materials](material.md)
 
 # Table of contents:
 
