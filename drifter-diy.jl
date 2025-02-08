@@ -9,6 +9,11 @@ debug_logger = ConsoleLogger(stderr, Logging.Debug);
 global_logger(debug_logger)
 
 
+function format_message(longitude,latitude,time)
+    msg = "https://alexander-barth.github.io/dmap/?t=$longitude,$latitude&time=$time"
+    return msg
+end
+
 @info "starting $(Dates.now())"
 
 confname = joinpath(dirname(@__FILE__),"drifter-diy.toml")
@@ -23,9 +28,6 @@ pin = config["pin"]
 APN = config["access_point_network"]
 portname = config["portname"]
 baudrate = config["baudrate"]
-map_lat = 42.5773
-map_lon = 8.7619
-map_zoom = 14
 
 @info "wait 60s"
 sleep(60)
@@ -103,7 +105,7 @@ open(fname,"a+") do f
         # log position if available
         if !isnothing(time) && !isnothing(latitude) && !isnothing(longitude)
             if now - last_message >  dt_message
-                message = "position at $time: https://www.openstreetmap.org/?mlon=$longitude&mlat=$latitude#map=$map_zoom/$map_lat/$map_lon"
+                message = format_message(longitude,latitude,time)
                 @info "about to send" message
                 push!(outbox_messages,message)
                 last_message = now
@@ -122,7 +124,7 @@ open(fname,"a+") do f
             @info "$(length(messages)) message(s)"
             for message in messages
                 if strip(lowercase(message.sms_message_body)) == "status"
-                    msg = "sigo vivo, estoy en $longitude, $latitude, $time"
+                    msg = format_message(longitude,latitude,time)
                     @info "about to send" msg
                     push!(outbox_messages,msg)
                     GSMHat.delete_message(sp, message.index)
