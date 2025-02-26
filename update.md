@@ -1,12 +1,25 @@
 
+# Update the Raspberry Pi and software configuration
 
-* connect your laptop to `GL-MT300N-V2-c2d`
+The following steps allow you to update the software running on the Raspberry Pi and the necessary configuration.
 
 
-* power on Raspberry Pi via the USB C cable
-* wait until IP addresses apears in the router
-* make sure your laptop is connected to `GL-MT300N-V2-c2d` otherwise your will get errors like `No route to host`.
-* connection to Raspberry Pi via ssh
+* Connect your laptop to the WiFi network `GL-MT300N-V2-c2d`. The password will be provided. Make sure that you stay connected to this access point. Do not make any download while connected this network which is not related to this lecture.
+
+* Power on Raspberry Pi via the USB C cable
+* Wait until IP addresses apears in the router
+* Open a terminal (for example the Windows Power Shell)
+* Connection to Raspberry Pi via ssh
+
+``` bash
+ssh pi@192.168.1.6
+```
+
+where 192.168.1.6 should be the IP adress from the routers admin page. This IP address will be different for every Raspberry Pi. When you connect the first time, you need to confirm the connection by typing "yes".
+
+Note that everybody can connect to the Raspberry PI using the username (pi) and password aslong as your are on the same network.
+
+* If `No route to host`. make sure your laptop is connected to `GL-MT300N-V2-c2d` otherwise your will get errors like
 
 * 
 cd drifter-raspberry-pi
