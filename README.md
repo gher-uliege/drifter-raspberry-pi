@@ -8,11 +8,23 @@ List of materials needed: [🔧 materials](material.md)
 # Table of contents:
 
 
+1. [💾 first steps](first-steps-on-linux.md)
+
+
+## Installation from scratch
+
 1. [💾 software installation](01-software-installation.md)
 1. [⚡ reduce power consumption](02-reduce-power-consumption.md)
 1. [🚨 blinking leds](03-blinking-leds.md)
 1. [☎️ GSM modem](04-GSM-modem.md)
 1. [⚙️ configure `drifter-diy.jl`](05-configure-drifter-diy.md)
+
+## Updating
+
+1. [🧑‍💻 update the software](update.md)
+
+## Data analysis
+
 1. [🌊 notes for deployment](06-deployment.md)
 1. [💻 Analysis of drifter data](https://tinyurl.com/drifter-julia) with the [sample data](https://dox.ulg.ac.be/index.php/s/fMcSM6wLjXAVYLR/download)
     and [bathymetry](https://dox.ulg.ac.be/index.php/s/9ZwWDbsTgCwgS90/download).

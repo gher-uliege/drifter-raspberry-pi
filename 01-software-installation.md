@@ -49,22 +49,6 @@ where `192.168.1.6` should be the IP adress from the routers admin page. This IP
 
 Note that everybody can connect to the Raspberry PI using the username (`pi`) and password aslong as your are on the same network.
 
-## First step
-
-
-These are the basic shell commands:
-
-| Command  | Description  |
-|---|---|
-| `ls` | list all files in current directory |
-| `cd directory_name` | change directory |
-| `rm file_name` | remove a file |
-| `cat /proc/cpuinfo` | see the content of a text file |
-| `wget some_url` | download a file from URL |
-| `top`  | see which process is running |
-| `nano`  | a simple text editor for the terminal |
-| `apt-get` | install packages (i.e. programs) |
-
 
 ### Julia
 
