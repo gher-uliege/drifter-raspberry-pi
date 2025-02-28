@@ -1,13 +1,18 @@
 # Windows
 
 
-## Command Prompt ([Windows Terminal](https://apps.microsoft.com/detail/9n0dx20hk701?ocid=webpdpshare))
+## Windows Terminal
 
 * open: search for "command prompt" in the start menu
-* short cuts: Copy: Control-C; paste Control-V
+* short cuts: copy: Control-C; paste Control-V
 * close the shell: command `exit`
 * more [information](https://learn.microsoft.com/en-us/windows/terminal/)
+* Preinstalled since Windows 11 and also available ([here](https://apps.microsoft.com/detail/9n0dx20hk701?ocid=webpdpshare)).
 
+## Windows Console
+* open: press Windows+R to open "Run" box. Type `cmd` and then click "OK"
+* see https://stackoverflow.com/a/11543856/3801401 for copy/paste
+  
 # Linux (GNOME)
 
 ## Gnome terminal
