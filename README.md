@@ -8,7 +8,7 @@ List of materials needed: [🔧 materials](material.md)
 # Table of contents:
 
 
-1. [💾 first steps](first-steps-on-linux.md)
+1. [🐧 first steps](first-steps-on-linux.md)
 
 
 ## Installation from scratch
@@ -34,7 +34,7 @@ List of materials needed: [🔧 materials](material.md)
 * Connection via ssh
 
 ``` bash
-sudo shutdown -h now
+sudo halt
 ```
 
 Wait that green led is off, then disconnect power supply.
