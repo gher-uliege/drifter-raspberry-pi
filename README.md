@@ -8,7 +8,7 @@ List of materials needed: [🔧 materials](material.md)
 # Table of contents:
 
 
-1. [🐧 first steps](first-steps-on-linux.md)
+1. [🐧 first steps on Linux](first-steps-on-linux.md)
 
 
 ## Installation from scratch
