@@ -17,16 +17,25 @@ last_saved = DateTime(1,1,1)
 
 dev = open(devicename,"r")
 dev_lines = eachline(dev)
-fields = [:longitude,:latitude,:fix_quality,:num_sats,:HDOP]
+fields = [:longitude,:latitude,
+          #:fix_quality,
+          #:num_sats,
+          #:HDOP,
+          ]
 delim = ','
 string_quote = '"'
 
 save_each = Dates.Second(1)
 
+#=
+line = first(dev_lines)
+=#
 open(fname,"w") do fout
+#fout = stdout
     println(fout,join(["time",string.(fields)...],delim))
 
-    for line in dev_lines
+for line in dev_lines
+    global last_saved
         if isempty(line)
             continue
         end
@@ -35,12 +44,12 @@ open(fname,"w") do fout
         try
             record = NMEA.parse(line)
 
-            if  record isa NMEA.GGA
+            if  record isa NMEA.GLL
                 time = Dates.now()
-
+                @show record
                 if time > last_saved + save_each            
-                    print(time)
-                    print(delim)
+                    print(fout,time)
+                    print(fout,delim)
                     for (i,f) in enumerate(fields)
                         field = getproperty(record,f)
                         if field isa Number
@@ -49,7 +58,7 @@ open(fname,"w") do fout
                             print(fout,string_quote,field,string_quote)
                         end                
                         if i < length(fields)
-                            print(delim)
+                            print(fout,delim)
                         end
                     end
                     println(fout)
@@ -61,7 +70,7 @@ open(fname,"w") do fout
                 end
             end
         catch err
-            @debug "failing to parse record" err
+            @info "failing to parse record" err
         end
     end
 end
