@@ -28,7 +28,7 @@ All commands end with the characters `\r\n` (carriage return, line feed). The ba
 | AT+CPIN="1234" | Unlook SIM using pin 1234 | |
 | AT+CREG? | Network registration status | |
 | ATD0032XXXXXXXXX; | Call a phone number 0032XXXXXXXXX (replacing all X by numbers) | |
-
+| ATE0 / ATE1 | disable / enable echo of commands |
 
 ## Minicom first tests
 
