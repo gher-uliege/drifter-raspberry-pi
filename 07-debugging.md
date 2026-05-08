@@ -57,7 +57,7 @@ For example `AT+CPIN="12341234","1234"` where the new pin can be the same as the
 
 
 
- ## Decoding SMS messages
+## Decoding SMS messages
 
 ```julia
 using GSMHat, TOML
@@ -79,4 +79,30 @@ decodemsg(messages[1].sms_message_body)
 
 ```bash
 ssh -o PubkeyAuthentication=no -o PreferredAuthentications=password  -A pi@192.168.0.199
+```
+
+
+## Query credit
+
+
+```julia
+AT
+OK
+AT+CUDS=?
+ERROR
+AT+CUSD=?
++CUSD: (0-2)
+
+OK
+AT+CUSD?
++CUSD: 0
+
+# OK
+AT+CSCS="GSM"
+# OK
+AT+CUSD=1,"#121#",15
+# OK
+# 
+# +CUSD: 0, "Krediet: 8.94 EUR Geldigheid: 19/03/2026. Extra min., sms, MB: druk #120# en verzenden.", 15
+
 ```
